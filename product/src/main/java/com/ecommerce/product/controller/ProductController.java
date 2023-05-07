@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.ecommerce.product.constants.RestURLConstants;
 import com.ecommerce.product.dto.CreateProductInDto;
 import com.ecommerce.product.dto.CreateProductOutDto;
-import com.ecommerce.product.dto.ProductOutDto;
+import com.ecommerce.product.dto.GetProductOutDto;
 import com.ecommerce.product.dto.ResponseOutDto;
 import com.ecommerce.product.dto.UpdateProductInDto;
 import com.ecommerce.product.service.ProductService;
@@ -45,24 +45,27 @@ public class ProductController {
 	 * @throws Exception
 	 */
 	@PostMapping(path = "create")
-	public ResponseEntity<List<CreateProductOutDto>> createProduct(
-			final @RequestBody List<CreateProductInDto> CreateProductInDtos) throws Exception {
+	public ResponseEntity<CreateProductOutDto> createProduct(
+			final @RequestBody CreateProductInDto CreateProductInDtos) throws Exception {
 		LOGGER.info("Create product started.");
-		List<CreateProductOutDto> createProductOutDtos = productService.createProduct(CreateProductInDtos);
+		CreateProductOutDto createProductOutDto = productService.createProduct(CreateProductInDtos);
 		LOGGER.info("Create product completed. ");
-		return ResponseEntity.status(HttpStatus.OK).body(createProductOutDtos);
+		return ResponseEntity.status(HttpStatus.OK).body(createProductOutDto);
 	}
 
 	/**
-	 * @param updateProductsList
-	 * @return
+	 * @param updateProductDto
+	 * @param productId
+	 * @return ResponseOutDto
 	 * @throws Exception
 	 */
-	@PutMapping(path = "update")
-	public ResponseEntity<ResponseOutDto> updateProducts(final @RequestBody List<UpdateProductInDto> updateProductsList)
+	@PutMapping(path = "update/{productId}")
+	public ResponseEntity<ResponseOutDto> updateProducts(
+			final @RequestBody UpdateProductInDto updateProductDto,
+			final @PathVariable String productId)
 			throws Exception {
 		LOGGER.info("Update product started.");
-		ResponseOutDto responseOutDto = productService.updateProducts(updateProductsList);
+		ResponseOutDto responseOutDto = productService.updateProducts(updateProductDto, productId);
 		LOGGER.info("Update product completed.");
 		return ResponseEntity.status(HttpStatus.OK).body(responseOutDto);
 	}
@@ -75,9 +78,9 @@ public class ProductController {
 	 * @throws Exception
 	 */
 	@GetMapping(path = "")
-	public ResponseEntity<List<ProductOutDto>> getAllProducts() throws Exception {
+	public ResponseEntity<List<GetProductOutDto>> getAllProducts() throws Exception {
 		LOGGER.info("Get all products started.");
-		List<ProductOutDto> productOutDtoList = productService.getAllProducts();
+		List<GetProductOutDto> productOutDtoList = productService.getAllProducts();
 		LOGGER.info("Get all products completed.");
 		return ResponseEntity.status(HttpStatus.OK).body(productOutDtoList);
 	}
@@ -88,11 +91,11 @@ public class ProductController {
 	 * @throws Exception
 	 */
 	@GetMapping(path = "{productId}")
-	public ResponseEntity<ProductOutDto> getProduct(final @PathVariable String productId) throws Exception {
-		LOGGER.info("Get product details started for product id : ", productId);
-		ProductOutDto productOutDto = productService.getProduct(productId);
-		LOGGER.info("Get product details completed for product id : ", productId);
-		return ResponseEntity.status(HttpStatus.OK).body(productOutDto);
+	public ResponseEntity<GetProductOutDto> getProduct(final @PathVariable String productId) throws Exception {
+		LOGGER.info("Get product details started for product id : {}", productId);
+		GetProductOutDto getProductOutDto = productService.getProduct(productId);
+		LOGGER.info("Get product details completed for product id : {}", productId);
+		return ResponseEntity.status(HttpStatus.OK).body(getProductOutDto);
 	}
 
 	/**

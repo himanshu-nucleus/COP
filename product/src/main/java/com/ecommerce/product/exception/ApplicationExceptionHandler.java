@@ -32,4 +32,17 @@ public class ApplicationExceptionHandler {
         return new ResponseEntity<ErrorResponse>(errorResponse, HttpStatus.NOT_FOUND);
     }
     
+    /**
+     * @param ex
+     * @return
+     */
+    @ResponseStatus(code = HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(InvalidDetailsException.class)
+    public final ResponseEntity<ErrorResponse> handleInvalidXMLException(final InvalidDetailsException ex) {
+        List<String> errorMessages = new ArrayList<String>();
+        errorMessages.add(ex.getMessage());
+        ErrorResponse errorResponse = new ErrorResponse(HttpStatus.BAD_REQUEST.value(), errorMessages);
+        return new ResponseEntity<ErrorResponse>(errorResponse, HttpStatus.BAD_REQUEST);
+    }
+    
 }
