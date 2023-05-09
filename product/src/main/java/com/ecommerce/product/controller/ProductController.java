@@ -41,12 +41,12 @@ public class ProductController {
 
 	/**
 	 * @param fileId
-	 * @return List<CreateProductOutDto>
+	 * @return CreateProductOutDto
 	 * @throws Exception
 	 */
 	@PostMapping(path = "create")
-	public ResponseEntity<CreateProductOutDto> createProduct(
-			final @RequestBody CreateProductInDto CreateProductInDtos) throws Exception {
+	public ResponseEntity<CreateProductOutDto> createProduct(final @RequestBody CreateProductInDto CreateProductInDtos)
+			throws Exception {
 		LOGGER.info("Create product started.");
 		CreateProductOutDto createProductOutDto = productService.createProduct(CreateProductInDtos);
 		LOGGER.info("Create product completed. ");
@@ -60,10 +60,8 @@ public class ProductController {
 	 * @throws Exception
 	 */
 	@PutMapping(path = "update/{productId}")
-	public ResponseEntity<ResponseOutDto> updateProducts(
-			final @RequestBody UpdateProductInDto updateProductDto,
-			final @PathVariable String productId)
-			throws Exception {
+	public ResponseEntity<ResponseOutDto> updateProducts(final @RequestBody UpdateProductInDto updateProductDto,
+			final @PathVariable String productId) throws Exception {
 		LOGGER.info("Update product started.");
 		ResponseOutDto responseOutDto = productService.updateProducts(updateProductDto, productId);
 		LOGGER.info("Update product completed.");
@@ -74,7 +72,7 @@ public class ProductController {
 	 * @param fileId
 	 * @param version
 	 * @param tableId
-	 * @return ProductOutDto
+	 * @return List<GetProductOutDto>
 	 * @throws Exception
 	 */
 	@GetMapping(path = "")
@@ -87,7 +85,7 @@ public class ProductController {
 
 	/**
 	 * @param productId
-	 * @return
+	 * @return GetProductOutDto
 	 * @throws Exception
 	 */
 	@GetMapping(path = "{productId}")
@@ -100,7 +98,7 @@ public class ProductController {
 
 	/**
 	 * @param productId
-	 * @return
+	 * @return ResponseOutDto
 	 * @throws Exception
 	 */
 	@DeleteMapping(path = "delete/{productId}")

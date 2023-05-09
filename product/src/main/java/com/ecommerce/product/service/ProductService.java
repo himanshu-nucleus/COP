@@ -9,6 +9,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.ecommerce.product.constants.ResponseConstants;
 import com.ecommerce.product.domain.Product;
 import com.ecommerce.product.dto.CreateProductInDto;
 import com.ecommerce.product.dto.CreateProductOutDto;
@@ -42,7 +43,7 @@ public class ProductService {
 
 		if (Objects.isNull(createProductInDto.getName()) || createProductInDto.getQuantity() == 0
 				|| createProductInDto.getPrice() == 0) {
-			throw new InvalidDetailsException("Invalid details for a product!");
+			throw new InvalidDetailsException(ResponseConstants.INVALID_INPUT_REQUEST);
 		}
 
 		Product product = modelMapper.map(createProductInDto, Product.class);
@@ -61,12 +62,12 @@ public class ProductService {
 	public GetProductOutDto getProduct(String productId) throws InvalidDetailsException, RecordNotFoundException {
 
 		if (Objects.isNull(productId)) {
-			throw new InvalidDetailsException("Invalid product Id!");
+			throw new InvalidDetailsException(ResponseConstants.INVALID_INPUT_REQUEST);
 		}
 
 		Optional<Product> optProduct = productRepository.findById(productId);
 		if (optProduct.isEmpty()) {
-			throw new RecordNotFoundException("Product not found!");
+			throw new RecordNotFoundException(ResponseConstants.PRODUCTS_NOT_FOUND);
 		}
 
 		Product product = optProduct.get();
@@ -83,7 +84,7 @@ public class ProductService {
 		List<Product> allProducts = productRepository.findAll();
 
 		if (allProducts.size() == 0) {
-			throw new RecordNotFoundException("No Products Found!");
+			throw new RecordNotFoundException(ResponseConstants.NO_PRODUCTS_FOUND);
 		}
 
 		List<GetProductOutDto> getProductsList = allProducts.stream()
@@ -106,7 +107,7 @@ public class ProductService {
 
 		Optional<Product> optProduct = productRepository.findById(productId);
 		if (optProduct.isEmpty()) {
-			throw new RecordNotFoundException("Product not found!");
+			throw new RecordNotFoundException(ResponseConstants.PRODUCTS_NOT_FOUND);
 		}
 
 		Product product = modelMapper.map(updateProductDto, Product.class);
@@ -114,7 +115,7 @@ public class ProductService {
 		product = productRepository.save(product);
 
 		ResponseOutDto reponseOutDto = new ResponseOutDto();
-		reponseOutDto.setMessage("Product Updated Successfully!");
+		reponseOutDto.setMessage(ResponseConstants.PRODUCTS_UPDATED);
 		return reponseOutDto;
 	}
 
@@ -128,13 +129,13 @@ public class ProductService {
 
 		Optional<Product> optProduct = productRepository.findById(productId);
 		if (optProduct.isEmpty()) {
-			throw new RecordNotFoundException("Product not found!");
+			throw new RecordNotFoundException(ResponseConstants.PRODUCTS_NOT_FOUND);
 		}
 
 		productRepository.deleteById(productId);
 
 		ResponseOutDto reponseOutDto = new ResponseOutDto();
-		reponseOutDto.setMessage("Product Deleted Successfully!");
+		reponseOutDto.setMessage(ResponseConstants.PRODUCTS_DELETED);
 		return reponseOutDto;
 	}
 }
