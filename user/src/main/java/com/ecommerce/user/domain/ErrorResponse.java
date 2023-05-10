@@ -8,11 +8,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
-/**
- *
- * @author ManavJindal
- * This class will contain the error code and error message which will be shown in the exception.
- */
+
 @Getter
 @Setter
 @ToString
