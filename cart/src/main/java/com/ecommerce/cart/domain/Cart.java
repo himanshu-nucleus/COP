@@ -6,7 +6,6 @@ import java.util.Objects;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import com.ecommerce.cart.dto.CartProducts;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -39,6 +38,4 @@ public class Cart {
 		return Objects.equals(cartProducts, other.cartProducts) && Objects.equals(id, other.id)
 				&& Objects.equals(userId, other.userId);
 	}
-
-
 }

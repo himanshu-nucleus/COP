@@ -9,7 +9,7 @@ import lombok.ToString;
 @Getter
 @Setter
 @ToString
-public class CartProducts {
+public class CartProductsDetail {
 
 	private String productId;
     private String name;
@@ -28,10 +28,10 @@ public class CartProducts {
 		if (this == obj) {
 			return true;
 		}
-		if (!(obj instanceof CartProducts)) {
+		if (!(obj instanceof CartProductsDetail)) {
 			return false;
 		}
-		CartProducts other = (CartProducts) obj;
+		CartProductsDetail other = (CartProductsDetail) obj;
 		return Objects.equals(description, other.description)
 				&& Double.doubleToLongBits(discount) == Double.doubleToLongBits(other.discount)
 				&& Objects.equals(manufacturer, other.manufacturer) && Objects.equals(name, other.name)

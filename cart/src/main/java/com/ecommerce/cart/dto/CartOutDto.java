@@ -14,11 +14,11 @@ public class CartOutDto {
 	
 	private String id;
 	private Integer userId;
-	private List<CartProducts> cartProducts;
+	private List<CartProductsDetail> cartProductsDetail;
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(cartProducts, id, userId);
+		return Objects.hash(cartProductsDetail, id, userId);
 	}
 	@Override
 	public boolean equals(Object obj) {
@@ -29,7 +29,7 @@ public class CartOutDto {
 			return false;
 		}
 		CartOutDto other = (CartOutDto) obj;
-		return Objects.equals(cartProducts, other.cartProducts) && Objects.equals(id, other.id)
+		return Objects.equals(cartProductsDetail, other.cartProductsDetail) && Objects.equals(id, other.id)
 				&& Objects.equals(userId, other.userId);
 	}
 
