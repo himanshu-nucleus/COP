@@ -47,17 +47,7 @@ public class CartService {
 	 */
 	public ResponseOutDto createCart(CreateCartInDto createCartInDto) throws RecordNotFoundException {
 
-		Optional<Product> optProduct = productRepository.findById(createCartInDto.getProductId());
-		if (optProduct.isEmpty()) {
-			throw new RecordNotFoundException(ResponseConstants.PRODUCTS_NOT_FOUND);
-		}
-
-		Product product = optProduct.get();
-
-		Integer remainingQuantity = product.getQuantity() - createCartInDto.getQuantity();
-		if (product.getQuantity() == 0 || remainingQuantity < 0) {
-			throw new RecordNotFoundException(ResponseConstants.PRODUCTS_OOS);
-		}
+		checkProduct(createCartInDto);
 
 		CartProducts cartProduct = new CartProducts();
 		cartProduct.setQuantity(createCartInDto.getQuantity());
@@ -75,6 +65,26 @@ public class CartService {
 		response.setMessage(ResponseConstants.CART_CREATED);
 
 		return response;
+	}
+
+	/**
+	 * @param createCartInDto
+	 * @throws RecordNotFoundException
+	 */
+	private void checkProduct(CreateCartInDto createCartInDto) throws RecordNotFoundException {
+		
+		Optional<Product> optProduct = productRepository.findById(createCartInDto.getProductId());
+		if (optProduct.isEmpty()) {
+			throw new RecordNotFoundException(ResponseConstants.PRODUCTS_NOT_FOUND);
+		}
+
+		Product product = optProduct.get();
+
+		Integer remainingQuantity = product.getQuantity() - createCartInDto.getQuantity();
+		if (product.getQuantity() == 0 || remainingQuantity < 0) {
+			throw new RecordNotFoundException(ResponseConstants.PRODUCTS_OOS);
+		}
+		
 	}
 
 	/**
@@ -140,6 +150,8 @@ public class CartService {
 	 */
 	public ResponseOutDto updateCart(CreateCartInDto updateCartDetails, String cartId) throws RecordNotFoundException {
 
+		checkProduct(updateCartDetails);
+		
 		Optional<Cart> optCart = cartRepository.findById(cartId);
 		if (optCart.isEmpty()) {
 			throw new RecordNotFoundException(ResponseConstants.CART_NOT_FOUND);
