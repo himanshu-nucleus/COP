@@ -1,11 +1,11 @@
 package com.ecommerce.order.exception;
 
-public class RecordNotFoundException  extends Exception{
+public class RecordNotFoundException extends Exception{
 
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = 8241835696610117843L;
+	private static final long serialVersionUID = -3803193588532019121L;
 
 	/**
      * @param message - The message to be send in the exception.
