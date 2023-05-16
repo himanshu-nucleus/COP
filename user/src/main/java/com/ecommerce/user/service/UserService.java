@@ -164,9 +164,9 @@ public class UserService {
 		return responseOutDto;
 	}
 
-	public Boolean checkUser(Long userId) {
+	public Boolean checkUserAndSeller(Long userId, String role) {
 		Boolean user = false;
-		Optional<User> optionalUser = userRepository.findById(userId);
+		Optional<User> optionalUser = userRepository.findByUserIdAndRole(userId, role);
 		if (optionalUser.isPresent()) {
 			user = true;
 		}

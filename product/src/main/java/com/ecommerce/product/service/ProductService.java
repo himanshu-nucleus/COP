@@ -51,7 +51,7 @@ public class ProductService {
 	public CreateProductOutDto createProduct(CreateProductInDto createProductInDto, Long userId)
 			throws InvalidDetailsException, RecordNotFoundException {
 
-		checkUserExistOrNot(userId);
+		checkUserAndSellerIfTrue(userId, "seller");
 
 		if (Objects.isNull(createProductInDto.getName()) || createProductInDto.getQuantity() == 0
 				|| createProductInDto.getPrice() == 0) {
@@ -117,7 +117,7 @@ public class ProductService {
 	public ResponseOutDto updateProducts(UpdateProductInDto updateProductDto, String productId, Long userId)
 			throws RecordNotFoundException, InvalidDetailsException {
 
-		checkUserExistOrNot(userId);
+		checkUserAndSellerIfTrue(userId, "seller");
 		
 		if (Objects.isNull(updateProductDto) || Objects.isNull(productId)) {
 			throw new InvalidDetailsException("Invalid product details!");
@@ -147,7 +147,7 @@ public class ProductService {
 	 */
 	public ResponseOutDto deleteProduct(String productId, Long userId) throws InvalidDetailsException, RecordNotFoundException {
 
-		checkUserExistOrNot(userId);
+		checkUserAndSellerIfTrue(userId, "seller");
 		
 		Optional<Product> optProduct = productRepository.findByIdAndUserId(productId, userId);
 		if (optProduct.isEmpty()) {
@@ -166,8 +166,8 @@ public class ProductService {
 	 * @return
 	 * @throws RecordNotFoundException
 	 */
-	public void checkUserExistOrNot(Long userId) throws RecordNotFoundException {
-		if (userClient.getUserDetails(userId) != true) {
+	public void checkUserAndSellerIfTrue(Long userId, String role) throws RecordNotFoundException {
+		if (userClient.checkUserAndSeller(userId, role) != true) {
 			throw new RecordNotFoundException(ResponseConstants.UNAUTHORIZED_USER);
 		}
 	}

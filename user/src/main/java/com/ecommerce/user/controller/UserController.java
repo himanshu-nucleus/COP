@@ -119,10 +119,11 @@ public class UserController {
 	 * @return Boolean
 	 * @throws RecordNotFoundException
 	 */
-	@GetMapping(path = "/check/{userId}")
-	public final Boolean checkUser(@PathVariable final Long userId) throws RecordNotFoundException {
+	@GetMapping(path = "/check/{userId}/role/{role}")
+	public final Boolean checkUser(@PathVariable final Long userId,
+			@PathVariable final String role) throws RecordNotFoundException {
 		LOGGER.info("Check user started for user id : {}", userId);
-		Boolean user = userService.checkUser(userId);
+		Boolean user = userService.checkUserAndSeller(userId, role);
 		LOGGER.info("Check user completed for user id : {}", userId);
 		return user;
 	}

@@ -11,4 +11,6 @@ import com.ecommerce.user.domain.User;
 public interface UserRepository extends JpaRepository<User, Long> {
 
 	Optional<User> findByEmail(String email);
+
+	Optional<User> findByUserIdAndRole(Long userId, String role);
 }
