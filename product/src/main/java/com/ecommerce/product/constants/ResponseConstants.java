@@ -13,5 +13,7 @@ public final class ResponseConstants {
 	public static final String NO_PRODUCTS_FOUND = "No Products Found!";
 	
 	public static final String INVALID_INPUT_REQUEST = "Invalid Request!";
+	
+	public static final String UNAUTHORIZED_USER = "Unauthorized User!";
 
 }

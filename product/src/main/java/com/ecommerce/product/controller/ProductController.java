@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ecommerce.product.constants.RestURLConstants;
@@ -45,10 +46,11 @@ public class ProductController {
 	 * @throws Exception
 	 */
 	@PostMapping(path = "create")
-	public ResponseEntity<CreateProductOutDto> createProduct(final @RequestBody CreateProductInDto CreateProductInDtos)
+	public ResponseEntity<CreateProductOutDto> createProduct(final @RequestBody CreateProductInDto createProductInDto,
+			final @RequestParam Long userId)
 			throws Exception {
 		LOGGER.info("Create product started.");
-		CreateProductOutDto createProductOutDto = productService.createProduct(CreateProductInDtos);
+		CreateProductOutDto createProductOutDto = productService.createProduct(createProductInDto, userId);
 		LOGGER.info("Create product completed. ");
 		return ResponseEntity.status(HttpStatus.OK).body(createProductOutDto);
 	}
@@ -61,9 +63,10 @@ public class ProductController {
 	 */
 	@PutMapping(path = "update/{productId}")
 	public ResponseEntity<ResponseOutDto> updateProducts(final @RequestBody UpdateProductInDto updateProductDto,
-			final @PathVariable String productId) throws Exception {
+			final @PathVariable String productId,
+			final @RequestParam Long userId) throws Exception {
 		LOGGER.info("Update product started.");
-		ResponseOutDto responseOutDto = productService.updateProducts(updateProductDto, productId);
+		ResponseOutDto responseOutDto = productService.updateProducts(updateProductDto, productId, userId);
 		LOGGER.info("Update product completed.");
 		return ResponseEntity.status(HttpStatus.OK).body(responseOutDto);
 	}
@@ -102,9 +105,10 @@ public class ProductController {
 	 * @throws Exception
 	 */
 	@DeleteMapping(path = "delete/{productId}")
-	public ResponseEntity<ResponseOutDto> deleteProduct(final @PathVariable String productId) throws Exception {
+	public ResponseEntity<ResponseOutDto> deleteProduct(final @PathVariable String productId,
+			final @RequestParam Long userId) throws Exception {
 		LOGGER.info("Delete prodcut for id: {}", productId);
-		ResponseOutDto responseOutDTO = productService.deleteProduct(productId);
+		ResponseOutDto responseOutDTO = productService.deleteProduct(productId, userId);
 		LOGGER.info("Delete product for completed for file id: {} ", productId);
 		return ResponseEntity.status(HttpStatus.OK).body(responseOutDTO);
 	}

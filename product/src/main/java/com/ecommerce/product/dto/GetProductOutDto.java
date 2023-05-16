@@ -39,6 +39,4 @@ public class GetProductOutDto {
 				&& Double.doubleToLongBits(price) == Double.doubleToLongBits(other.price)
 				&& Objects.equals(quantity, other.quantity);
 	}
-
-    
 }

@@ -34,6 +34,9 @@ public class CreateProductInDto {
 		return Objects.equals(description, other.description)
 				&& Double.doubleToLongBits(discount) == Double.doubleToLongBits(other.discount)
 				&& Objects.equals(manufacturer, other.manufacturer) && Objects.equals(name, other.name)
-				&& Double.doubleToLongBits(price) == Double.doubleToLongBits(other.price) && quantity == other.quantity;
+				&& Double.doubleToLongBits(price) == Double.doubleToLongBits(other.price)
+				&& Objects.equals(quantity, other.quantity);
 	}
+
+	
 }

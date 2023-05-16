@@ -164,4 +164,13 @@ public class UserService {
 		return responseOutDto;
 	}
 
+	public Boolean checkUser(Long userId) {
+		Boolean user = false;
+		Optional<User> optionalUser = userRepository.findById(userId);
+		if (optionalUser.isPresent()) {
+			user = true;
+		}
+		return user;
+	}
+
 }

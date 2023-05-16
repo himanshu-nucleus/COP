@@ -19,6 +19,7 @@ import com.ecommerce.product.dto.UpdateProductInDto;
 import com.ecommerce.product.exception.InvalidDetailsException;
 import com.ecommerce.product.exception.RecordNotFoundException;
 import com.ecommerce.product.repository.ProductRepository;
+import com.ecommerce.product.repository.UserClient;
 
 @Service
 public class ProductService {
@@ -35,11 +36,22 @@ public class ProductService {
 	private ProductRepository productRepository;
 
 	/**
+	 * UserClient
+	 */
+	@Autowired
+	private UserClient userClient;
+
+	/**
 	 * @param createProductInDto
+	 * @param userId 
 	 * @return CreateProductOutDto
 	 * @throws InvalidDetailsException
+	 * @throws RecordNotFoundException
 	 */
-	public CreateProductOutDto createProduct(CreateProductInDto createProductInDto) throws InvalidDetailsException {
+	public CreateProductOutDto createProduct(CreateProductInDto createProductInDto, Long userId)
+			throws InvalidDetailsException, RecordNotFoundException {
+
+		checkUserExistOrNot(userId);
 
 		if (Objects.isNull(createProductInDto.getName()) || createProductInDto.getQuantity() == 0
 				|| createProductInDto.getPrice() == 0) {
@@ -47,6 +59,7 @@ public class ProductService {
 		}
 
 		Product product = modelMapper.map(createProductInDto, Product.class);
+		product.setUserId(userId);
 		product = productRepository.save(product);
 
 		CreateProductOutDto productOutDto = modelMapper.map(product, CreateProductOutDto.class);
@@ -55,6 +68,7 @@ public class ProductService {
 
 	/**
 	 * @param productId
+	 * @param userId 
 	 * @return ProductOutDto
 	 * @throws InvalidDetailsException
 	 * @throws RecordNotFoundException
@@ -76,6 +90,7 @@ public class ProductService {
 	}
 
 	/**
+	 * @param userId 
 	 * @return List<GetProductOutDto>
 	 * @throws RecordNotFoundException
 	 */
@@ -94,24 +109,28 @@ public class ProductService {
 
 	/**
 	 * @param updateProductDto
+	 * @param userId 
 	 * @return ResponseOutDto
 	 * @throws RecordNotFoundException
 	 * @throws InvalidDetailsException
 	 */
-	public ResponseOutDto updateProducts(UpdateProductInDto updateProductDto, String productId)
+	public ResponseOutDto updateProducts(UpdateProductInDto updateProductDto, String productId, Long userId)
 			throws RecordNotFoundException, InvalidDetailsException {
 
+		checkUserExistOrNot(userId);
+		
 		if (Objects.isNull(updateProductDto) || Objects.isNull(productId)) {
 			throw new InvalidDetailsException("Invalid product details!");
 		}
 
-		Optional<Product> optProduct = productRepository.findById(productId);
+		Optional<Product> optProduct = productRepository.findByIdAndUserId(productId, userId);
 		if (optProduct.isEmpty()) {
 			throw new RecordNotFoundException(ResponseConstants.PRODUCTS_NOT_FOUND);
 		}
-
+		
 		Product product = modelMapper.map(updateProductDto, Product.class);
 		product.setId(productId);
+		product.setUserId(userId);
 		product = productRepository.save(product);
 
 		ResponseOutDto reponseOutDto = new ResponseOutDto();
@@ -121,13 +140,16 @@ public class ProductService {
 
 	/**
 	 * @param productId
+	 * @param userId 
 	 * @return ResponseOutDto
 	 * @throws InvalidDetailsException
 	 * @throws RecordNotFoundException
 	 */
-	public ResponseOutDto deleteProduct(String productId) throws InvalidDetailsException, RecordNotFoundException {
+	public ResponseOutDto deleteProduct(String productId, Long userId) throws InvalidDetailsException, RecordNotFoundException {
 
-		Optional<Product> optProduct = productRepository.findById(productId);
+		checkUserExistOrNot(userId);
+		
+		Optional<Product> optProduct = productRepository.findByIdAndUserId(productId, userId);
 		if (optProduct.isEmpty()) {
 			throw new RecordNotFoundException(ResponseConstants.PRODUCTS_NOT_FOUND);
 		}
@@ -138,4 +160,16 @@ public class ProductService {
 		reponseOutDto.setMessage(ResponseConstants.PRODUCTS_DELETED);
 		return reponseOutDto;
 	}
+
+	/**
+	 * @param userId
+	 * @return
+	 * @throws RecordNotFoundException
+	 */
+	public void checkUserExistOrNot(Long userId) throws RecordNotFoundException {
+		if (userClient.getUserDetails(userId) != true) {
+			throw new RecordNotFoundException(ResponseConstants.UNAUTHORIZED_USER);
+		}
+	}
+	
 }

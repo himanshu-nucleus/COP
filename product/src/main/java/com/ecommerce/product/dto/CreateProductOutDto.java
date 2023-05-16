@@ -18,10 +18,11 @@ public class CreateProductOutDto {
     private double price;
     private double discount;
     private String manufacturer;
+    private Long userId;
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(description, discount, id, manufacturer, name, price, quantity);
+		return Objects.hash(description, discount, id, manufacturer, name, price, quantity, userId);
 	}
 	@Override
 	public boolean equals(Object obj) {
@@ -37,6 +38,8 @@ public class CreateProductOutDto {
 				&& Objects.equals(id, other.id) && Objects.equals(manufacturer, other.manufacturer)
 				&& Objects.equals(name, other.name)
 				&& Double.doubleToLongBits(price) == Double.doubleToLongBits(other.price)
-				&& Objects.equals(quantity, other.quantity);
+				&& Objects.equals(quantity, other.quantity) && Objects.equals(userId, other.userId);
 	}
+
+	
 }

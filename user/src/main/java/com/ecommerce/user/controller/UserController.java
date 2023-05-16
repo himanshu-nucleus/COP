@@ -112,5 +112,19 @@ public class UserController {
 		LOGGER.info("Delete user completed for user id : {}", userId);
 		return responseOutDto;
 	}
+	
+	
+	/**
+	 * @param userId
+	 * @return Boolean
+	 * @throws RecordNotFoundException
+	 */
+	@GetMapping(path = "/check/{userId}")
+	public final Boolean checkUser(@PathVariable final Long userId) throws RecordNotFoundException {
+		LOGGER.info("Check user started for user id : {}", userId);
+		Boolean user = userService.checkUser(userId);
+		LOGGER.info("Check user completed for user id : {}", userId);
+		return user;
+	}
 
 }
