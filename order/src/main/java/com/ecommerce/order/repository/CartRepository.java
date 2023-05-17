@@ -12,4 +12,6 @@ public interface CartRepository extends MongoRepository<Cart, String> {
 
 	Optional<Cart> findByUserId(Integer userId);
 
+	Optional<Cart> findByIdAndUserId(String cartId, Long long1);
+
 }

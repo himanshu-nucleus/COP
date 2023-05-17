@@ -43,7 +43,7 @@ public class OrderController {
 	 * @return ResponseOutDto
 	 * @throws Exception
 	 */
-	@PostMapping(path = "create")
+	@PostMapping(path = "place")
 	public ResponseEntity<ResponseOutDto> placeOrder(final @RequestBody OrderInDto orderInDto) throws Exception {
 		LOGGER.info("Place order started.");
 		ResponseOutDto responseOutDto = orderService.placeOrder(orderInDto);

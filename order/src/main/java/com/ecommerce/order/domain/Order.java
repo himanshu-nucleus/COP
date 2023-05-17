@@ -19,16 +19,16 @@ public class Order {
 	
 	@Id
 	private String id;
-	private Integer userId;
+	private Long userId;
 	private Instant createDt;
-	private double totalPrice;
+	private double totalAmount;
 	private String status;
 	private String cardNo;
 	private List<Product> products;
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(createDt, id, products, status, totalPrice, userId);
+		return Objects.hash(createDt, id, products, status, totalAmount, userId);
 	}
 	@Override
 	public boolean equals(Object obj) {
@@ -41,7 +41,7 @@ public class Order {
 		Order other = (Order) obj;
 		return Objects.equals(createDt, other.createDt) && Objects.equals(id, other.id)
 				&& Objects.equals(products, other.products) && Objects.equals(status, other.status)
-				&& Double.doubleToLongBits(totalPrice) == Double.doubleToLongBits(other.totalPrice)
+				&& Double.doubleToLongBits(totalAmount) == Double.doubleToLongBits(other.totalAmount)
 				&& Objects.equals(userId, other.userId);
 	}
 }

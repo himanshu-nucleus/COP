@@ -16,4 +16,6 @@ public interface PaymentRepository extends MongoRepository<Wallet, String> {
 	List<Wallet> findByUserId(Long userId);
 
 	List<Wallet> findByUserIdAndIsDefault(Long long1, boolean b);
+
+	Optional<Wallet> findByIdAndUserId(String walletId, Long userId);
 }

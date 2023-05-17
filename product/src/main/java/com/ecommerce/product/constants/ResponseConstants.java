@@ -10,6 +10,8 @@ public final class ResponseConstants {
 	
 	public static final String PRODUCTS_NOT_FOUND = "Product Not Found!";
 	
+	public static final String INVALID_USER_REQUEST = "Unable to perform action for user!";
+	
 	public static final String NO_PRODUCTS_FOUND = "No Products Found!";
 	
 	public static final String INVALID_INPUT_REQUEST = "Invalid Request!";

@@ -14,12 +14,12 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ecommerce.payment.constants.RestURLConstants;
 import com.ecommerce.payment.dto.AddWalletInDto;
 import com.ecommerce.payment.dto.ResponseOutDto;
-import com.ecommerce.payment.dto.UpdateDefaultWalletInDto;
 import com.ecommerce.payment.dto.WalletOutDto;
 import com.ecommerce.payment.service.PaymentService;
 
@@ -59,13 +59,18 @@ public class PaymentController {
 	 */
 	@PutMapping(path = "update/default/wallet/{walletId}")
 	public ResponseEntity<ResponseOutDto> updateProducts(final @PathVariable String walletId,
-			final @RequestBody UpdateDefaultWalletInDto updateDefaultWalletInDto) throws Exception {
+			final @RequestParam Long userId) throws Exception {
 		LOGGER.info("Update default wallet started for id : {}", walletId);
-		ResponseOutDto responseOutDto = paymentService.updateDefaultWallet(updateDefaultWalletInDto, walletId);
+		ResponseOutDto responseOutDto = paymentService.updateDefaultWallet(userId, walletId);
 		LOGGER.info("Update default wallet started for id : {}", walletId);
 		return ResponseEntity.status(HttpStatus.OK).body(responseOutDto);
 	}
 
+	/**
+	 * @param userId
+	 * @return List<WalletOutDto>
+	 * @throws Exception
+	 */
 	@GetMapping(path = "wallet/user/{userId}")
 	public ResponseEntity<List<WalletOutDto>> getWallets(final @PathVariable Long userId) throws Exception {
 		LOGGER.info("Get wallets started for userId : {}", userId);
@@ -80,9 +85,10 @@ public class PaymentController {
 	 * @throws Exception
 	 */
 	@DeleteMapping(path = "delete/wallet/{walletId}")
-	public ResponseEntity<ResponseOutDto> deleteWallet(final @PathVariable String walletId) throws Exception {
+	public ResponseEntity<ResponseOutDto> deleteWallet(final @PathVariable String walletId,
+			final @RequestParam Long userId) throws Exception {
 		LOGGER.info("Delete wallet started for id: {}", walletId);
-		ResponseOutDto responseOutDTO = paymentService.deleteWallet(walletId);
+		ResponseOutDto responseOutDTO = paymentService.deleteWallet(walletId, userId);
 		LOGGER.info("Delete wallet completed for id: {}", walletId);
 		return ResponseEntity.status(HttpStatus.OK).body(responseOutDTO);
 	}

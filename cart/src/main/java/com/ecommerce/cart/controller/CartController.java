@@ -84,7 +84,7 @@ public class CartController {
 	 * @return ResponseOutDto
 	 * @throws Exception
 	 */
-	@DeleteMapping(path = "delete/{cartId}")
+	@DeleteMapping(path = "delete/product")
 	public ResponseEntity<ResponseOutDto> deleteCartProduct(
 			final @RequestBody DeleteCartProductInDto deleteCartProductInDto) throws Exception {
 		LOGGER.info("Delete cart for cartId : {}", deleteCartProductInDto.getCartId());

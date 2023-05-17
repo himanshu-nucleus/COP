@@ -75,10 +75,6 @@ public class ProductService {
 	 */
 	public GetProductOutDto getProduct(String productId) throws InvalidDetailsException, RecordNotFoundException {
 
-		if (Objects.isNull(productId)) {
-			throw new InvalidDetailsException(ResponseConstants.INVALID_INPUT_REQUEST);
-		}
-
 		Optional<Product> optProduct = productRepository.findById(productId);
 		if (optProduct.isEmpty()) {
 			throw new RecordNotFoundException(ResponseConstants.PRODUCTS_NOT_FOUND);
@@ -119,13 +115,9 @@ public class ProductService {
 
 		checkUserAndItsRole(userId, "seller");
 
-		if (Objects.isNull(updateProductDto) || Objects.isNull(productId)) {
-			throw new InvalidDetailsException("Invalid product details!");
-		}
-
 		Optional<Product> optProduct = productRepository.findByIdAndUserId(productId, userId);
 		if (optProduct.isEmpty()) {
-			throw new RecordNotFoundException(ResponseConstants.PRODUCTS_NOT_FOUND);
+			throw new RecordNotFoundException(ResponseConstants.INVALID_USER_REQUEST);
 		}
 
 		Product product = modelMapper.map(updateProductDto, Product.class);
@@ -152,7 +144,7 @@ public class ProductService {
 
 		Optional<Product> optProduct = productRepository.findByIdAndUserId(productId, userId);
 		if (optProduct.isEmpty()) {
-			throw new RecordNotFoundException(ResponseConstants.PRODUCTS_NOT_FOUND);
+			throw new RecordNotFoundException(ResponseConstants.INVALID_USER_REQUEST);
 		}
 
 		productRepository.deleteById(productId);

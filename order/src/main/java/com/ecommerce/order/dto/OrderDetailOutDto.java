@@ -17,14 +17,14 @@ public class OrderDetailOutDto {
 
 	private String id;
 	private Instant createDt;
-	private double totalPrice;
+	private double totalAmount;
 	private String status;
 	private String cardNo;
 	private List<Product> products;
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(cardNo, createDt, id, products, status, totalPrice);
+		return Objects.hash(cardNo, createDt, id, products, status, totalAmount);
 	}
 	@Override
 	public boolean equals(Object obj) {
@@ -38,7 +38,7 @@ public class OrderDetailOutDto {
 		return Objects.equals(cardNo, other.cardNo) && Objects.equals(createDt, other.createDt)
 				&& Objects.equals(id, other.id) && Objects.equals(products, other.products)
 				&& Objects.equals(status, other.status)
-				&& Double.doubleToLongBits(totalPrice) == Double.doubleToLongBits(other.totalPrice);
+				&& Double.doubleToLongBits(totalAmount) == Double.doubleToLongBits(other.totalAmount);
 	}
 
 }

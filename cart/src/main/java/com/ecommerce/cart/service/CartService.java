@@ -1,4 +1,4 @@
-package com.ecommerce.cart.service;
+	package com.ecommerce.cart.service;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -153,9 +153,11 @@ public class CartService {
 		Optional<CartProducts> productFound = cart.getCartProducts().stream()
 				.filter(f -> f.getProductId().equals(deleteCartProductInDto.getProductId())).findFirst();
 		
-		if (productFound.isPresent()) {
-			cart.getCartProducts().remove(productFound.get());
+		if (productFound.isEmpty()) {
+			throw new RecordNotFoundException(ResponseConstants.PRODUCTS_NOT_FOUND);
 		}
+		
+		cart.getCartProducts().remove(productFound.get());
 
 		if (cart.getCartProducts().size() == 0) {
 			cartRepository.deleteById(deleteCartProductInDto.getCartId());
@@ -164,7 +166,7 @@ public class CartService {
 		}
 
 		ResponseOutDto response = new ResponseOutDto();
-		response.setMessage(ResponseConstants.CART_DELETED);
+		response.setMessage(ResponseConstants.CART_PRODUCT_DELETED);
 
 		return response;
 	}

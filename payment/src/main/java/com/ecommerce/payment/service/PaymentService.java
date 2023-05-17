@@ -13,7 +13,6 @@ import com.ecommerce.payment.constants.ResponseConstants;
 import com.ecommerce.payment.domain.Wallet;
 import com.ecommerce.payment.dto.AddWalletInDto;
 import com.ecommerce.payment.dto.ResponseOutDto;
-import com.ecommerce.payment.dto.UpdateDefaultWalletInDto;
 import com.ecommerce.payment.dto.WalletOutDto;
 import com.ecommerce.payment.exception.RecordAlreadyExistsException;
 import com.ecommerce.payment.exception.RecordNotFoundException;
@@ -77,12 +76,15 @@ public class PaymentService {
 
 	/**
 	 * @param walletId
+	 * @param userId 
 	 * @return ResponseOutDto
 	 * @throws RecordNotFoundException
 	 */
-	public ResponseOutDto deleteWallet(String walletId) throws RecordNotFoundException {
+	public ResponseOutDto deleteWallet(String walletId, Long userId) throws RecordNotFoundException {
+		
+		checkUserAndItsRole(userId, "buyer");
 
-		Optional<Wallet> optWallet = paymentRepository.findById(walletId);
+		Optional<Wallet> optWallet = paymentRepository.findByIdAndUserId(walletId, userId);
 		if (optWallet.isEmpty()) {
 			throw new RecordNotFoundException(ResponseConstants.WALLET_NOT_FOUND);
 		}
@@ -96,28 +98,28 @@ public class PaymentService {
 	}
 
 	/**
-	 * @param updateDefaultWalletInDto
+	 * @param userId
 	 * @param walletId
 	 * @return ResponseOutDto
 	 * @throws RecordNotFoundException
 	 */
-	public ResponseOutDto updateDefaultWallet(UpdateDefaultWalletInDto updateDefaultWalletInDto, String walletId)
+	public ResponseOutDto updateDefaultWallet(Long userId, String walletId)
 			throws RecordNotFoundException {
 
-		checkUserAndItsRole(updateDefaultWalletInDto.getUserId(), "buyer");
+		checkUserAndItsRole(userId, "buyer");
 
-		Optional<Wallet> optWallet = paymentRepository.findById(walletId);
+		Optional<Wallet> optWallet = paymentRepository.findByIdAndUserId(walletId, userId);
 		if (optWallet.isEmpty()) {
 			throw new RecordNotFoundException(ResponseConstants.WALLET_NOT_FOUND);
 		}
 
-		List<Wallet> wallets = paymentRepository.findByUserIdAndIsDefault(updateDefaultWalletInDto.getUserId(), true);
+		List<Wallet> wallets = paymentRepository.findByUserIdAndIsDefault(userId, true);
 		for (Wallet wallet : wallets) {
 			wallet.setIsDefault(false);
 		}
 		paymentRepository.saveAll(wallets);
 
-		optWallet.get().setIsDefault(updateDefaultWalletInDto.getIsDefault());
+		optWallet.get().setIsDefault(true);
 		paymentRepository.save(optWallet.get());
 
 		ResponseOutDto response = new ResponseOutDto();

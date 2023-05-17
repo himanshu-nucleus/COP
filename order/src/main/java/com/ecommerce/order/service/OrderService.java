@@ -77,7 +77,7 @@ public class OrderService {
 
 		checkUserAndItsRole(orderInDto.getUserId(), "buyer");
 
-		Optional<Cart> optCart = cartRepository.findById(orderInDto.getCartId());
+		Optional<Cart> optCart = cartRepository.findByIdAndUserId(orderInDto.getCartId(), orderInDto.getUserId());
 		if (optCart.isEmpty()) {
 			throw new RecordNotFoundException(ResponseConstants.NO_CARTS_AVAILABLE);
 		}
@@ -127,8 +127,8 @@ public class OrderService {
 		Order order = new Order();
 		order.setCardNo(wallet.getCardNo());
 		order.setStatus("placed");
-		order.setTotalPrice(totalPrice);
-		order.setUserId(wallet.getUserId());
+		order.setTotalAmount(totalPrice);
+		order.setUserId(orderInDto.getUserId());
 		order.setCreateDt(Instant.now());
 		order.setProducts(orderProductDetails);
 		orderRepository.save(order);
@@ -206,7 +206,7 @@ public class OrderService {
 		}
 
 		Wallet wallet = paymentRepository.findByCardNo(order.getCardNo()).get();
-		wallet.setBalance(wallet.getBalance() + order.getTotalPrice());
+		wallet.setBalance(wallet.getBalance() + order.getTotalAmount());
 		paymentRepository.save(wallet);
 
 		ResponseOutDto response = new ResponseOutDto();

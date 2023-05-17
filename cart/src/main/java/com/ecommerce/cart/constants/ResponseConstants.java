@@ -2,7 +2,7 @@ package com.ecommerce.cart.constants;
 
 public final class ResponseConstants {
 	
-	public static final String CART_DELETED = "Cart Deleted Successfully.";
+	public static final String CART_PRODUCT_DELETED = "Product from cart deleted successfully.";
 
 	public static final String CART_CREATED = "Cart Created Successfully.";
 	
