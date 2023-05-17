@@ -1,6 +1,7 @@
 package com.ecommerce.payment.service;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -17,6 +18,7 @@ import com.ecommerce.payment.dto.WalletOutDto;
 import com.ecommerce.payment.exception.RecordAlreadyExistsException;
 import com.ecommerce.payment.exception.RecordNotFoundException;
 import com.ecommerce.payment.repository.PaymentRepository;
+import com.ecommerce.payment.repository.UserClient;
 
 @Service
 public class PaymentService {
@@ -33,11 +35,21 @@ public class PaymentService {
 	private PaymentRepository paymentRepository;
 
 	/**
+	 * UserClient
+	 */
+	@Autowired
+	private UserClient userClient;
+
+	/**
 	 * @param addWalletInDto
 	 * @return ResponseOutDto
 	 * @throws RecordAlreadyExistsException
+	 * @throws RecordNotFoundException
 	 */
-	public ResponseOutDto addWallet(AddWalletInDto addWalletInDto) throws RecordAlreadyExistsException {
+	public ResponseOutDto addWallet(AddWalletInDto addWalletInDto)
+			throws RecordAlreadyExistsException, RecordNotFoundException {
+
+		checkUserAndItsRole(addWalletInDto.getUserId(), "buyer");
 
 		Optional<Wallet> optWallet = paymentRepository.findByUserIdAndCardNo(addWalletInDto.getUserId(),
 				addWalletInDto.getCardNo());
@@ -92,6 +104,8 @@ public class PaymentService {
 	public ResponseOutDto updateDefaultWallet(UpdateDefaultWalletInDto updateDefaultWalletInDto, String walletId)
 			throws RecordNotFoundException {
 
+		checkUserAndItsRole(updateDefaultWalletInDto.getUserId(), "buyer");
+
 		Optional<Wallet> optWallet = paymentRepository.findById(walletId);
 		if (optWallet.isEmpty()) {
 			throw new RecordNotFoundException(ResponseConstants.WALLET_NOT_FOUND);
@@ -117,7 +131,9 @@ public class PaymentService {
 	 * @return List<WalletOutDto>
 	 * @throws RecordNotFoundException
 	 */
-	public List<WalletOutDto> getWallets(String userId) throws RecordNotFoundException {
+	public List<WalletOutDto> getWallets(Long userId) throws RecordNotFoundException {
+
+		checkUserAndItsRole(userId, "buyer");
 
 		List<Wallet> wallets = paymentRepository.findByUserId(userId);
 		if (wallets.size() == 0) {
@@ -127,6 +143,17 @@ public class PaymentService {
 		List<WalletOutDto> walletOutDtos = wallets.stream().map(wallet -> modelMapper.map(wallet, WalletOutDto.class))
 				.collect(Collectors.toList());
 		return walletOutDtos;
+	}
+
+	/**
+	 * @param userId
+	 * @throws RecordNotFoundException
+	 */
+	public void checkUserAndItsRole(Long userId, String role) throws RecordNotFoundException {
+		String userRole = userClient.checkUserAndRole(userId, role);
+		if (Objects.isNull(userRole) || !userRole.equals(role)) {
+			throw new RecordNotFoundException(ResponseConstants.UNAUTHORIZED_USER);
+		}
 	}
 
 }

@@ -11,7 +11,7 @@ import lombok.ToString;
 @ToString
 public class OrderInDto {
 
-	private Integer userId;
+	private Long userId;
 	private String cartId;
 
 	@Override

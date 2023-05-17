@@ -10,6 +10,6 @@ import com.ecommerce.cart.domain.Cart;
 @Repository
 public interface CartRepository extends MongoRepository<Cart, String> {
 
-	Optional<Cart> findByUserId(Integer userId);
+	Optional<Cart> findByUserId(Long userId);
 
 }

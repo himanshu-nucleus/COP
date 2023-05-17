@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.ecommerce.cart.constants.RestURLConstants;
 import com.ecommerce.cart.dto.CartOutDto;
 import com.ecommerce.cart.dto.CreateCartInDto;
+import com.ecommerce.cart.dto.DeleteCartProductInDto;
 import com.ecommerce.cart.dto.ResponseOutDto;
 import com.ecommerce.cart.service.CartService;
 
@@ -49,18 +50,17 @@ public class CartController {
 		LOGGER.info("Create cart completed. ");
 		return ResponseEntity.status(HttpStatus.OK).body(responseOutDto);
 	}
-	
+
 	/**
 	 * @param userId
 	 * @return CartOutDto
 	 * @throws Exception
 	 */
 	@GetMapping(path = "")
-	public ResponseEntity<CartOutDto> getCart(
-			final @RequestParam Integer userId) throws Exception {
-		LOGGER.info("Get cart started for userId {}"+ userId);
+	public ResponseEntity<CartOutDto> getCart(final @RequestParam Long userId) throws Exception {
+		LOGGER.info("Get cart started for userId {}" + userId);
 		CartOutDto cartOutDto = cartService.getCart(userId);
-		LOGGER.info("Get cart started for userId {}"+ userId);
+		LOGGER.info("Get cart started for userId {}" + userId);
 		return ResponseEntity.status(HttpStatus.OK).body(cartOutDto);
 	}
 
@@ -85,10 +85,11 @@ public class CartController {
 	 * @throws Exception
 	 */
 	@DeleteMapping(path = "delete/{cartId}")
-	public ResponseEntity<ResponseOutDto> deleteCart(final @PathVariable String cartId) throws Exception {
-		LOGGER.info("Delete cart for cartId : {}", cartId);
-		ResponseOutDto responseOutDTO = cartService.deleteCart(cartId);
-		LOGGER.info("Delete cart completed for cartId : {}", cartId);
+	public ResponseEntity<ResponseOutDto> deleteCartProduct(
+			final @RequestBody DeleteCartProductInDto deleteCartProductInDto) throws Exception {
+		LOGGER.info("Delete cart for cartId : {}", deleteCartProductInDto.getCartId());
+		ResponseOutDto responseOutDTO = cartService.deleteCartProduct(deleteCartProductInDto);
+		LOGGER.info("Delete cart completed for cartId : {}", deleteCartProductInDto.getCartId());
 		return ResponseEntity.status(HttpStatus.OK).body(responseOutDTO);
 	}
 }

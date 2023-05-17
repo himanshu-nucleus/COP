@@ -11,7 +11,7 @@ import lombok.ToString;
 @ToString
 public class AddWalletInDto {
 
-    private String userId;
+    private Long userId;
     private String cardNo;
     private double balance;
     private Boolean isDefault;

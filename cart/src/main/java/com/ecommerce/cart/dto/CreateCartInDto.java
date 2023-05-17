@@ -11,7 +11,7 @@ import lombok.ToString;
 @ToString
 public class CreateCartInDto {
 	
-	private Integer userId;
+	private Long userId;
 	private String productId;
     private Integer quantity;
 

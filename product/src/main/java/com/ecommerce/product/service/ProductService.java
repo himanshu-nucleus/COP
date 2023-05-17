@@ -43,7 +43,7 @@ public class ProductService {
 
 	/**
 	 * @param createProductInDto
-	 * @param userId 
+	 * @param userId
 	 * @return CreateProductOutDto
 	 * @throws InvalidDetailsException
 	 * @throws RecordNotFoundException
@@ -51,7 +51,7 @@ public class ProductService {
 	public CreateProductOutDto createProduct(CreateProductInDto createProductInDto, Long userId)
 			throws InvalidDetailsException, RecordNotFoundException {
 
-		checkUserAndSellerIfTrue(userId, "seller");
+		checkUserAndItsRole(userId, "seller");
 
 		if (Objects.isNull(createProductInDto.getName()) || createProductInDto.getQuantity() == 0
 				|| createProductInDto.getPrice() == 0) {
@@ -68,7 +68,7 @@ public class ProductService {
 
 	/**
 	 * @param productId
-	 * @param userId 
+	 * @param userId
 	 * @return ProductOutDto
 	 * @throws InvalidDetailsException
 	 * @throws RecordNotFoundException
@@ -90,7 +90,7 @@ public class ProductService {
 	}
 
 	/**
-	 * @param userId 
+	 * @param userId
 	 * @return List<GetProductOutDto>
 	 * @throws RecordNotFoundException
 	 */
@@ -109,7 +109,7 @@ public class ProductService {
 
 	/**
 	 * @param updateProductDto
-	 * @param userId 
+	 * @param userId
 	 * @return ResponseOutDto
 	 * @throws RecordNotFoundException
 	 * @throws InvalidDetailsException
@@ -117,8 +117,8 @@ public class ProductService {
 	public ResponseOutDto updateProducts(UpdateProductInDto updateProductDto, String productId, Long userId)
 			throws RecordNotFoundException, InvalidDetailsException {
 
-		checkUserAndSellerIfTrue(userId, "seller");
-		
+		checkUserAndItsRole(userId, "seller");
+
 		if (Objects.isNull(updateProductDto) || Objects.isNull(productId)) {
 			throw new InvalidDetailsException("Invalid product details!");
 		}
@@ -127,7 +127,7 @@ public class ProductService {
 		if (optProduct.isEmpty()) {
 			throw new RecordNotFoundException(ResponseConstants.PRODUCTS_NOT_FOUND);
 		}
-		
+
 		Product product = modelMapper.map(updateProductDto, Product.class);
 		product.setId(productId);
 		product.setUserId(userId);
@@ -140,15 +140,16 @@ public class ProductService {
 
 	/**
 	 * @param productId
-	 * @param userId 
+	 * @param userId
 	 * @return ResponseOutDto
 	 * @throws InvalidDetailsException
 	 * @throws RecordNotFoundException
 	 */
-	public ResponseOutDto deleteProduct(String productId, Long userId) throws InvalidDetailsException, RecordNotFoundException {
+	public ResponseOutDto deleteProduct(String productId, Long userId)
+			throws InvalidDetailsException, RecordNotFoundException {
 
-		checkUserAndSellerIfTrue(userId, "seller");
-		
+		checkUserAndItsRole(userId, "seller");
+
 		Optional<Product> optProduct = productRepository.findByIdAndUserId(productId, userId);
 		if (optProduct.isEmpty()) {
 			throw new RecordNotFoundException(ResponseConstants.PRODUCTS_NOT_FOUND);
@@ -166,10 +167,10 @@ public class ProductService {
 	 * @return
 	 * @throws RecordNotFoundException
 	 */
-	public void checkUserAndSellerIfTrue(Long userId, String role) throws RecordNotFoundException {
-		if (userClient.checkUserAndSeller(userId, role) != true) {
+	public void checkUserAndItsRole(Long userId, String role) throws RecordNotFoundException {
+		String userRole = userClient.checkUserAndRole(userId, role);
+		if (Objects.isNull(userRole) || !userRole.equals(role)) {
 			throw new RecordNotFoundException(ResponseConstants.UNAUTHORIZED_USER);
 		}
 	}
-	
 }

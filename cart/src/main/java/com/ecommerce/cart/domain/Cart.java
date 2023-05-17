@@ -19,7 +19,7 @@ public class Cart {
 	
 	@Id
 	private String id;
-	private Integer userId;
+	private Long userId;
 	private List<CartProducts> cartProducts;
 
 	@Override

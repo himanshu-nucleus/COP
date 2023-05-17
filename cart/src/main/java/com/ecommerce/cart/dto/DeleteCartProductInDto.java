@@ -1,6 +1,5 @@
 package com.ecommerce.cart.dto;
 
-import java.util.List;
 import java.util.Objects;
 
 import lombok.Getter;
@@ -10,26 +9,26 @@ import lombok.ToString;
 @Getter
 @Setter
 @ToString
-public class CartOutDto {
+public class DeleteCartProductInDto {
 	
-	private String id;
+	private String cartId;
 	private Long userId;
-	private List<CartProductsDetail> cartProductsDetail;
+	private String productId;
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(cartProductsDetail, id, userId);
+		return Objects.hash(cartId, productId, userId);
 	}
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj) {
 			return true;
 		}
-		if (!(obj instanceof CartOutDto)) {
+		if (!(obj instanceof DeleteCartProductInDto)) {
 			return false;
 		}
-		CartOutDto other = (CartOutDto) obj;
-		return Objects.equals(cartProductsDetail, other.cartProductsDetail) && Objects.equals(id, other.id)
+		DeleteCartProductInDto other = (DeleteCartProductInDto) obj;
+		return Objects.equals(cartId, other.cartId) && Objects.equals(productId, other.productId)
 				&& Objects.equals(userId, other.userId);
 	}
 

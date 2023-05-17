@@ -1,4 +1,4 @@
-package com.ecommerce.product.repository;
+package com.ecommerce.cart.repository;
 
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;

@@ -10,7 +10,7 @@ import com.ecommerce.order.domain.Wallet;
 @Repository
 public interface PaymentRepository extends MongoRepository<Wallet, String> {
 
-	Optional<Wallet> findByUserIdAndIsDefault(Integer userId, boolean b);
+	Optional<Wallet> findByUserIdAndIsDefault(Long long1, boolean b);
 
 	Optional<Wallet> findByCardNo(String cardNo);
 

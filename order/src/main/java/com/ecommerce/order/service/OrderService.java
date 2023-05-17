@@ -3,6 +3,7 @@ package com.ecommerce.order.service;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -26,6 +27,7 @@ import com.ecommerce.order.repository.CartRepository;
 import com.ecommerce.order.repository.OrderRepository;
 import com.ecommerce.order.repository.PaymentRepository;
 import com.ecommerce.order.repository.ProductRepository;
+import com.ecommerce.order.repository.UserClient;
 
 @Service
 public class OrderService {
@@ -60,12 +62,20 @@ public class OrderService {
 	private PaymentRepository paymentRepository;
 
 	/**
+	 * UserClient
+	 */
+	@Autowired
+	private UserClient userClient;
+
+	/**
 	 * @param orderInDto
 	 * @return ResponseOutDto
 	 * @throws RecordNotFoundException
 	 * @throws InvalidDetailsException
 	 */
 	public ResponseOutDto placeOrder(OrderInDto orderInDto) throws RecordNotFoundException, InvalidDetailsException {
+
+		checkUserAndItsRole(orderInDto.getUserId(), "buyer");
 
 		Optional<Cart> optCart = cartRepository.findById(orderInDto.getCartId());
 		if (optCart.isEmpty()) {
@@ -136,7 +146,9 @@ public class OrderService {
 	 * @return List<OrderOutDto>
 	 * @throws RecordNotFoundException
 	 */
-	public List<OrderOutDto> getOrders(Integer userId) throws RecordNotFoundException {
+	public List<OrderOutDto> getOrders(Long userId) throws RecordNotFoundException {
+
+		checkUserAndItsRole(userId, "buyer");
 
 		List<Order> orders = orderRepository.findByUserId(userId);
 		if (orders.size() == 0) {
@@ -155,7 +167,9 @@ public class OrderService {
 	 * @return
 	 * @throws RecordNotFoundException
 	 */
-	public OrderDetailOutDto getOrderDetail(Integer userId, String orderId) throws RecordNotFoundException {
+	public OrderDetailOutDto getOrderDetail(Long userId, String orderId) throws RecordNotFoundException {
+
+		checkUserAndItsRole(userId, "buyer");
 
 		Optional<Order> optOrder = orderRepository.findByIdAndUserId(orderId, userId);
 		if (optOrder.isEmpty()) {
@@ -172,7 +186,9 @@ public class OrderService {
 	 * @return ResponseOutDto
 	 * @throws RecordNotFoundException
 	 */
-	public ResponseOutDto deleteOrder(String orderId, Integer userId) throws RecordNotFoundException {
+	public ResponseOutDto deleteOrder(String orderId, Long userId) throws RecordNotFoundException {
+
+		checkUserAndItsRole(userId, "buyer");
 
 		Optional<Order> optOrder = orderRepository.findByIdAndUserId(orderId, userId);
 		if (optOrder.isEmpty()) {
@@ -197,6 +213,17 @@ public class OrderService {
 		response.setMessage(ResponseConstants.ORDER_CANCELED);
 
 		return response;
+	}
+
+	/**
+	 * @param userId
+	 * @throws RecordNotFoundException
+	 */
+	public void checkUserAndItsRole(Long userId, String role) throws RecordNotFoundException {
+		String userRole = userClient.checkUserAndRole(userId, role);
+		if (Objects.isNull(userRole) || !userRole.equals(role)) {
+			throw new RecordNotFoundException(ResponseConstants.UNAUTHORIZED_USER);
+		}
 	}
 
 }

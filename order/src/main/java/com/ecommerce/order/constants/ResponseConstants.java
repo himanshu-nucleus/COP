@@ -21,5 +21,7 @@ public final class ResponseConstants {
 	public static final String ORDERS_NOT_FOUND = "Orders Not Found!";
 	
 	public static final String PRODUCTS_OOS = "Product Out of stock!";
+	
+	public static final String UNAUTHORIZED_USER = "Unauthorized User!";
 
 }

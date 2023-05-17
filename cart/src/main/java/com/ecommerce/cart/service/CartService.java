@@ -2,6 +2,7 @@ package com.ecommerce.cart.service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 import org.modelmapper.ModelMapper;
@@ -15,10 +16,12 @@ import com.ecommerce.cart.domain.Product;
 import com.ecommerce.cart.dto.CartOutDto;
 import com.ecommerce.cart.dto.CartProductsDetail;
 import com.ecommerce.cart.dto.CreateCartInDto;
+import com.ecommerce.cart.dto.DeleteCartProductInDto;
 import com.ecommerce.cart.dto.ResponseOutDto;
 import com.ecommerce.cart.exception.RecordNotFoundException;
 import com.ecommerce.cart.repository.CartRepository;
 import com.ecommerce.cart.repository.ProductRepository;
+import com.ecommerce.cart.repository.UserClient;
 
 @Service
 public class CartService {
@@ -41,12 +44,19 @@ public class CartService {
 	private ProductRepository productRepository;
 
 	/**
+	 * UserClient
+	 */
+	@Autowired
+	private UserClient userClient;
+
+	/**
 	 * @param createCartInDto
 	 * @return CreateCartInDto
 	 * @throws RecordNotFoundException
 	 */
 	public ResponseOutDto createCart(CreateCartInDto createCartInDto) throws RecordNotFoundException {
 
+		checkUserAndItsRole(createCartInDto.getUserId(), "buyer");
 		checkProduct(createCartInDto);
 
 		CartProducts cartProduct = new CartProducts();
@@ -72,7 +82,7 @@ public class CartService {
 	 * @throws RecordNotFoundException
 	 */
 	private void checkProduct(CreateCartInDto createCartInDto) throws RecordNotFoundException {
-		
+
 		Optional<Product> optProduct = productRepository.findById(createCartInDto.getProductId());
 		if (optProduct.isEmpty()) {
 			throw new RecordNotFoundException(ResponseConstants.PRODUCTS_NOT_FOUND);
@@ -84,7 +94,7 @@ public class CartService {
 		if (product.getQuantity() == 0 || remainingQuantity < 0) {
 			throw new RecordNotFoundException(ResponseConstants.PRODUCTS_OOS);
 		}
-		
+
 	}
 
 	/**
@@ -92,7 +102,9 @@ public class CartService {
 	 * @return CartOutDto
 	 * @throws RecordNotFoundException
 	 */
-	public CartOutDto getCart(Integer userId) throws RecordNotFoundException {
+	public CartOutDto getCart(Long userId) throws RecordNotFoundException {
+
+		checkUserAndItsRole(userId, "buyer");
 
 		Optional<Cart> optCart = cartRepository.findByUserId(userId);
 		if (optCart.isEmpty()) {
@@ -123,18 +135,33 @@ public class CartService {
 	}
 
 	/**
-	 * @param cartId
+	 * @param deleteCartProductInDto
 	 * @return ResponseOutDto
 	 * @throws RecordNotFoundException
 	 */
-	public ResponseOutDto deleteCart(String cartId) throws RecordNotFoundException {
+	public ResponseOutDto deleteCartProduct(DeleteCartProductInDto deleteCartProductInDto)
+			throws RecordNotFoundException {
+		
+		checkUserAndItsRole(deleteCartProductInDto.getUserId(), "buyer");		
 
-		Optional<Cart> optCart = cartRepository.findById(cartId);
+		Optional<Cart> optCart = cartRepository.findById(deleteCartProductInDto.getCartId());
 		if (optCart.isEmpty()) {
 			throw new RecordNotFoundException(ResponseConstants.CART_NOT_FOUND);
 		}
+		
+		Cart cart = optCart.get();
+		Optional<CartProducts> productFound = cart.getCartProducts().stream()
+				.filter(f -> f.getProductId().equals(deleteCartProductInDto.getProductId())).findFirst();
+		
+		if (productFound.isPresent()) {
+			cart.getCartProducts().remove(productFound.get());
+		}
 
-		cartRepository.deleteById(cartId);
+		if (cart.getCartProducts().size() == 0) {
+			cartRepository.deleteById(deleteCartProductInDto.getCartId());
+		} else {
+			cartRepository.save(cart);
+		}
 
 		ResponseOutDto response = new ResponseOutDto();
 		response.setMessage(ResponseConstants.CART_DELETED);
@@ -150,8 +177,9 @@ public class CartService {
 	 */
 	public ResponseOutDto updateCart(CreateCartInDto updateCartDetails, String cartId) throws RecordNotFoundException {
 
+		checkUserAndItsRole(updateCartDetails.getUserId(), "buyer");
 		checkProduct(updateCartDetails);
-		
+
 		Optional<Cart> optCart = cartRepository.findById(cartId);
 		if (optCart.isEmpty()) {
 			throw new RecordNotFoundException(ResponseConstants.CART_NOT_FOUND);
@@ -179,5 +207,16 @@ public class CartService {
 		response.setMessage(ResponseConstants.CART_UPDATED);
 
 		return response;
+	}
+
+	/**
+	 * @param userId
+	 * @throws RecordNotFoundException
+	 */
+	public void checkUserAndItsRole(Long userId, String role) throws RecordNotFoundException {
+		String userRole = userClient.checkUserAndRole(userId, role);
+		if (Objects.isNull(userRole) || !userRole.equals(role)) {
+			throw new RecordNotFoundException(ResponseConstants.UNAUTHORIZED_USER);
+		}
 	}
 }

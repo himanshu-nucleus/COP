@@ -11,9 +11,9 @@ import com.ecommerce.payment.domain.Wallet;
 @Repository
 public interface PaymentRepository extends MongoRepository<Wallet, String> {
 
-	Optional<Wallet> findByUserIdAndCardNo(String userId, String cardNo);
+	Optional<Wallet> findByUserIdAndCardNo(Long long1, String cardNo);
 
-	List<Wallet> findByUserId(String userId);
+	List<Wallet> findByUserId(Long userId);
 
-	List<Wallet> findByUserIdAndIsDefault(String userId, boolean b);
+	List<Wallet> findByUserIdAndIsDefault(Long long1, boolean b);
 }

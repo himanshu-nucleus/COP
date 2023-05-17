@@ -11,7 +11,7 @@ import com.ecommerce.order.domain.Order;
 @Repository
 public interface OrderRepository extends MongoRepository<Order, String> {
 
-	List<Order> findByUserId(Integer userId);
+	List<Order> findByUserId(Long userId);
 
-	Optional<Order> findByIdAndUserId(String orderId, Integer userId);
+	Optional<Order> findByIdAndUserId(String orderId, Long userId);
 }

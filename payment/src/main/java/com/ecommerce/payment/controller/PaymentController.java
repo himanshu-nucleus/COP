@@ -67,7 +67,7 @@ public class PaymentController {
 	}
 
 	@GetMapping(path = "wallet/user/{userId}")
-	public ResponseEntity<List<WalletOutDto>> getWallets(final @PathVariable String userId) throws Exception {
+	public ResponseEntity<List<WalletOutDto>> getWallets(final @PathVariable Long userId) throws Exception {
 		LOGGER.info("Get wallets started for userId : {}", userId);
 		List<WalletOutDto> walletOutDtos = paymentService.getWallets(userId);
 		LOGGER.info("Get wallets completed for userId : {}", userId);

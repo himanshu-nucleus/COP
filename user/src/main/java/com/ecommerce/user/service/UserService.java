@@ -164,13 +164,13 @@ public class UserService {
 		return responseOutDto;
 	}
 
-	public Boolean checkUserAndSeller(Long userId, String role) {
-		Boolean user = false;
+	public String checkUserAndRole(Long userId, String role) {
+		String userRole = null;
 		Optional<User> optionalUser = userRepository.findByUserIdAndRole(userId, role);
 		if (optionalUser.isPresent()) {
-			user = true;
+			userRole = optionalUser.get().getRole();	
 		}
-		return user;
+		return userRole;
 	}
 
 }

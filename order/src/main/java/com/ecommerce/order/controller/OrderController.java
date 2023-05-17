@@ -57,7 +57,7 @@ public class OrderController {
 	 * @throws Exception
 	 */
 	@GetMapping(path = "")
-	public ResponseEntity<List<OrderOutDto>> getOrders(final @RequestParam Integer userId) throws Exception {
+	public ResponseEntity<List<OrderOutDto>> getOrders(final @RequestParam Long userId) throws Exception {
 		LOGGER.info("Get orders started for userId {}" + userId);
 		List<OrderOutDto> orders = orderService.getOrders(userId);
 		LOGGER.info("Get orders started for userId {}" + userId);
@@ -71,7 +71,7 @@ public class OrderController {
 	 * @throws Exception
 	 */
 	@GetMapping(path = "{orderId}")
-	public ResponseEntity<OrderDetailOutDto> getOrderDetail(final @RequestParam Integer userId,
+	public ResponseEntity<OrderDetailOutDto> getOrderDetail(final @RequestParam Long userId,
 			final @PathVariable String orderId) throws Exception {
 		LOGGER.info("Get order details started for orderId {}" + orderId);
 		OrderDetailOutDto orderDetail = orderService.getOrderDetail(userId, orderId);
@@ -86,7 +86,7 @@ public class OrderController {
 	 * @throws Exception
 	 */
 	@DeleteMapping(path = "delete/{orderId}")
-	public ResponseEntity<ResponseOutDto> deleteCart(final @RequestParam Integer userId,
+	public ResponseEntity<ResponseOutDto> deleteCart(final @RequestParam Long userId,
 			final @PathVariable String orderId) throws Exception {
 		LOGGER.info("Delete order for orderId : {}", orderId);
 		ResponseOutDto responseOutDTO = orderService.deleteOrder(orderId, userId);

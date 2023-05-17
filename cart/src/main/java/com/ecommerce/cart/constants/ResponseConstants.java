@@ -17,5 +17,7 @@ public final class ResponseConstants {
 	public static final String PRODUCTS_NOT_FOUND = "Product Not Found!";
 	
 	public static final String PRODUCTS_OOS = "Product Out of stock!";
+	
+	public static final String UNAUTHORIZED_USER = "Unauthorized User!";
 
 }

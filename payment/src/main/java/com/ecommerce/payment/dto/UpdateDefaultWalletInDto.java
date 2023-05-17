@@ -11,7 +11,7 @@ import lombok.ToString;
 @ToString
 public class UpdateDefaultWalletInDto {
 
-	private String userId;
+	private Long userId;
     private Boolean isDefault;
 
 	@Override
