@@ -22,6 +22,7 @@ public class CreateProductInDto {
 	public int hashCode() {
 		return Objects.hash(description, discount, manufacturer, name, price, quantity);
 	}
+
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj) {
@@ -38,5 +39,4 @@ public class CreateProductInDto {
 				&& Objects.equals(quantity, other.quantity);
 	}
 
-	
 }
