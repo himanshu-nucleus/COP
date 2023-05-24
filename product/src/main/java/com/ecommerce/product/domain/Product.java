@@ -20,7 +20,7 @@ public class Product {
 	private Long userId;
     private String name;
     private String description;
-    private int quantity;
+    private Integer quantity;
     private double price;
     private double discount;
     private String manufacturer;
