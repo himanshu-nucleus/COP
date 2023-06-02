@@ -1,13 +1,14 @@
-package com.ecommerce.product.service;
+package com.ecommerce.product.controller;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.junit.Before;
@@ -15,10 +16,14 @@ import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.modelmapper.ModelMapper;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import com.ecommerce.product.constants.ResponseConstants;
 import com.ecommerce.product.domain.Product;
@@ -27,13 +32,11 @@ import com.ecommerce.product.dto.CreateProductOutDto;
 import com.ecommerce.product.dto.GetProductOutDto;
 import com.ecommerce.product.dto.ResponseOutDto;
 import com.ecommerce.product.dto.UpdateProductInDto;
-import com.ecommerce.product.exception.InvalidDetailsException;
-import com.ecommerce.product.exception.RecordNotFoundException;
-import com.ecommerce.product.repository.ProductRepository;
-import com.ecommerce.product.repository.UserClient;
+import com.ecommerce.product.service.ProductService;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 @RunWith(SpringRunner.class)
-public class ProductServiceTest {
+public class ProductControllerTest {
 
     /**
      * The model mapper object.
@@ -41,32 +44,30 @@ public class ProductServiceTest {
     private ModelMapper modelMapper = new ModelMapper();
 
     /**
-     * ProductRepository
+     * ProductController
      */
-    @Mock
-    private ProductRepository productRepository;
+    @InjectMocks
+    private ProductController productController;
 
     /**
      * productService
      */
-    @InjectMocks
+    @Mock
     private ProductService productService;
 
-    /**
-     * UserClient
-     */
-    @Mock
-    private UserClient userClient;
+    ObjectMapper objectMapper = new ObjectMapper();
 
     @Before
     public void setup() {
         MockitoAnnotations.openMocks(this);
+       
     }
 
     @Test
-    public void createProdcutTest() throws InvalidDetailsException, RecordNotFoundException {
+    public void createProdcutTest() throws Exception {
 
         MockitoAnnotations.openMocks(this);
+        MockMvc mockMvc = MockMvcBuilders.standaloneSetup(productController).build();
 
         String id = "id1";
         String name = "name";
@@ -76,127 +77,88 @@ public class ProductServiceTest {
         double discount = 1.0;
         String manufacturer = "manufacturer";
         Long userId = 1L;
-        
-        Product product = buildProduct(null, userId, name, description, quantity, price, discount, manufacturer);
+
         Product retProduct = buildProduct(id, userId, name, description, quantity, price, discount, manufacturer);
 
         CreateProductInDto createProductInDto = buildCreateProductInDto(name, description, quantity, price, discount,
                 manufacturer);
-
-        Mockito.when(productRepository.save(product)).thenReturn(retProduct);
-        Mockito.when(userClient.checkUserAndRole(userId, "seller")).thenReturn("seller");
-
         CreateProductOutDto productOutDto = modelMapper.map(retProduct, CreateProductOutDto.class);
-
-        assertEquals(productOutDto, productService.createProduct(createProductInDto, 1L));
-
-        createProductInDto.setPrice(0);
-        InvalidDetailsException invalidDetailsException = assertThrows(InvalidDetailsException.class,
-                () -> productService.createProduct(createProductInDto, 1L));
-        assertEquals(ResponseConstants.INVALID_INPUT_REQUEST, invalidDetailsException.getMessage());
-
-    }
-
-    @Test
-    public void getProduct() throws InvalidDetailsException, RecordNotFoundException {
-
-        MockitoAnnotations.openMocks(this);
-
-        String id = "id1";
-        String name = "name";
-        String description = "description";
-        Integer quantity = 2;
-        double price = 1.0;
-        double discount = 1.0;
-        String manufacturer = "manufacturer";
-        Long userId = 1L;
-
-        Product retProduct = buildProduct(id, userId, name, description, quantity, price, discount, manufacturer);
-
-        RecordNotFoundException recordNotFoundException = assertThrows(RecordNotFoundException.class,
-                () -> productService.getProduct("id2"));
-        assertEquals(ResponseConstants.PRODUCTS_NOT_FOUND, recordNotFoundException.getMessage());
-
-        Optional<Product> optProduct = Optional.of(retProduct);
-        Mockito.when(productRepository.findById(id)).thenReturn(optProduct);
-
-        GetProductOutDto getProductOutDto = modelMapper.map(optProduct.get(), GetProductOutDto.class);
-        assertEquals(getProductOutDto, productService.getProduct(id));
-    }
-
-    @Test
-    public void getAllProducts() throws InvalidDetailsException, RecordNotFoundException {
-
-        MockitoAnnotations.openMocks(this);
-
-        String id = "id1";
-        String name = "name";
-        String description = "description";
-        Integer quantity = 2;
-        double price = 1.0;
-        double discount = 1.0;
-        String manufacturer = "manufacturer";
-        Long userId = 1L;
-
-        Product domainProduct = buildProduct(id, userId, name, description, quantity, price, discount, manufacturer);
-
-        RecordNotFoundException recordNotFoundException = assertThrows(RecordNotFoundException.class,
-                () -> productService.getAllProducts());
-        assertEquals(ResponseConstants.NO_PRODUCTS_FOUND, recordNotFoundException.getMessage());
-
-        List<Product> allProducts = new ArrayList<Product>();
-        allProducts.add(domainProduct);
-
-        List<GetProductOutDto> getProductsList = allProducts.stream()
-                .map(product -> modelMapper.map(product, GetProductOutDto.class)).collect(Collectors.toList());
-
-        Mockito.when(productRepository.findAll()).thenReturn(allProducts);
-        assertEquals(getProductsList, productService.getAllProducts());
-    }
-
-    @Test
-    public void updateProducts() throws InvalidDetailsException, RecordNotFoundException {
-
-        MockitoAnnotations.openMocks(this);
-
-        String id = "id1";
-        String name = "name";
-        String description = "description";
-        Integer quantity = 2;
-        double price = 1.0;
-        double discount = 1.0;
-        String manufacturer = "manufacturer";
-        Long userId = 1L;
-
-        Product product = buildProduct(null, userId, name, description, quantity, price, discount, manufacturer);
-        Product retProduct = buildProduct(id, userId, name, description, quantity, price, discount, manufacturer);
-
-        UpdateProductInDto updateProductDto = buildUpdateProductInDto(name, description, quantity, price, discount,
-                manufacturer);
         
-        Mockito.when(userClient.checkUserAndRole(userId, "seller")).thenReturn("seller");
-        Mockito.when(productRepository.findByIdAndUserId(id, userId)).thenReturn(Optional.of(retProduct));
-
-        Product product2 = modelMapper.map(updateProductDto, Product.class);
-        product2.setUserId(userId);
-        product2.setId(id);
-       
-        Mockito.when(productRepository.save(product)).thenReturn(product2);
-       
-        ResponseOutDto reponseOutDto = new ResponseOutDto();
-        reponseOutDto.setMessage(ResponseConstants.PRODUCTS_UPDATED);
-        assertEquals(reponseOutDto, productService.updateProducts(updateProductDto, id, userId));
-        
-        RecordNotFoundException recordNotFoundException = assertThrows(RecordNotFoundException.class,
-                () -> productService.updateProducts(updateProductDto, "id2", userId));
-        assertEquals(ResponseConstants.INVALID_USER_REQUEST, recordNotFoundException.getMessage());
+        String inputJSON = objectMapper.writeValueAsString(createProductInDto);
+        when(productService.createProduct(createProductInDto, userId)).thenReturn(productOutDto);
+        MvcResult mvcResult = mockMvc.perform(post("/v1/product/create?userId=1")
+                .contentType(MediaType.APPLICATION_JSON).content(inputJSON)).andReturn();
+        int responseStatus = mvcResult.getResponse().getStatus();
+        assertEquals(HttpStatus.OK.value(), responseStatus);
 
     }
     
     @Test
-    public void deleteProduct() throws InvalidDetailsException, RecordNotFoundException {
+    public void updateProductsTest() throws Exception {
 
         MockitoAnnotations.openMocks(this);
+        MockMvc mockMvc = MockMvcBuilders.standaloneSetup(productController).build();
+
+        String id = "id1";
+        String name = "name";
+        String description = "description";
+        Integer quantity = 2;
+        double price = 1.0;
+        double discount = 1.0;
+        String manufacturer = "manufacturer";
+        Long userId = 1L;
+
+        UpdateProductInDto updateProductDto = buildUpdateProductInDto(name, description, quantity, price, discount,
+                manufacturer);
+        
+        ResponseOutDto reponseOutDto = new ResponseOutDto();
+        reponseOutDto.setMessage(ResponseConstants.PRODUCTS_UPDATED);
+        
+        String inputJSON = objectMapper.writeValueAsString(updateProductDto);
+        when(productService.updateProducts(updateProductDto, id, userId)).thenReturn(reponseOutDto);
+        MvcResult mvcResult = mockMvc.perform(put("/v1/product/update/id1?userId=7")
+                .contentType(MediaType.APPLICATION_JSON).content(inputJSON)).andReturn();
+        int responseStatus = mvcResult.getResponse().getStatus();
+        assertEquals(HttpStatus.OK.value(), responseStatus);
+
+    }
+    
+    @Test
+    public void getAllProductsTest() throws Exception {
+
+        MockitoAnnotations.openMocks(this);
+        MockMvc mockMvc = MockMvcBuilders.standaloneSetup(productController).build();
+
+        String id = "id1";
+        String name = "name";
+        String description = "description";
+        Integer quantity = 2;
+        double price = 1.0;
+        double discount = 1.0;
+        String manufacturer = "manufacturer";
+        Long userId = 1L;
+        
+        List<Product> products = new ArrayList<Product>();
+        Product retProduct = buildProduct(id, userId, name, description, quantity, price, discount, manufacturer);
+        products.add(retProduct);
+        
+        List<GetProductOutDto> getProductsList = products.stream()
+                .map(product -> modelMapper.map(product, GetProductOutDto.class)).collect(Collectors.toList());
+        
+        when(productService.getAllProducts()).thenReturn(getProductsList);
+
+        MvcResult mvcResult = mockMvc.perform(get("/v1/product/")
+                .contentType(MediaType.APPLICATION_JSON)).andReturn();
+        int responseStatus = mvcResult.getResponse().getStatus();
+        assertEquals(HttpStatus.OK.value(), responseStatus);
+
+    }
+    
+    @Test
+    public void getProductTest() throws Exception {
+
+        MockitoAnnotations.openMocks(this);
+        MockMvc mockMvc = MockMvcBuilders.standaloneSetup(productController).build();
 
         String id = "id1";
         String name = "name";
@@ -209,19 +171,33 @@ public class ProductServiceTest {
 
         Product retProduct = buildProduct(id, userId, name, description, quantity, price, discount, manufacturer);
         
-        Mockito.when(userClient.checkUserAndRole(userId, "seller")).thenReturn("seller");
+        GetProductOutDto getProductOutDto = modelMapper.map(retProduct, GetProductOutDto.class);
+        
+        when(productService.getProduct(id)).thenReturn(getProductOutDto);
+        MvcResult mvcResult = mockMvc.perform(get("/v1/product/id1")
+                .contentType(MediaType.APPLICATION_JSON)).andReturn();
+        int responseStatus = mvcResult.getResponse().getStatus();
+        assertEquals(HttpStatus.OK.value(), responseStatus);
 
-        Mockito.when(productRepository.findByIdAndUserId(id, userId)).thenReturn(Optional.of(retProduct));
-        productRepository.deleteById(id);
-        verify(productRepository, times(1)).deleteById(id);
+    }
+    
+    @Test
+    public void deleteProductTest() throws Exception {
+        
+        MockitoAnnotations.openMocks(this);
+        MockMvc mockMvc = MockMvcBuilders.standaloneSetup(productController).build();
+
+        String id = "id1";
+        Long userId = 1L;
 
         ResponseOutDto reponseOutDto = new ResponseOutDto();
         reponseOutDto.setMessage(ResponseConstants.PRODUCTS_DELETED);
-        assertEquals(reponseOutDto, productService.deleteProduct(id, userId));
         
-        RecordNotFoundException recordNotFoundException = assertThrows(RecordNotFoundException.class,
-                () -> productService.deleteProduct("2L", userId));
-        assertEquals(ResponseConstants.INVALID_USER_REQUEST, recordNotFoundException.getMessage());
+        when(productService.deleteProduct(id, userId)).thenReturn(reponseOutDto);
+        MvcResult mvcResult = mockMvc.perform(delete("/v1/product/delete/id1?userId=1")
+                .contentType(MediaType.APPLICATION_JSON)).andReturn();
+        int responseStatus = mvcResult.getResponse().getStatus();
+        assertEquals(HttpStatus.OK.value(), responseStatus);
 
     }
 

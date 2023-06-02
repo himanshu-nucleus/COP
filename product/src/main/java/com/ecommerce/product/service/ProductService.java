@@ -114,7 +114,7 @@ public class ProductService {
 			throws RecordNotFoundException, InvalidDetailsException {
 
 		checkUserAndItsRole(userId, "seller");
-
+		
 		Optional<Product> optProduct = productRepository.findByIdAndUserId(productId, userId);
 		if (optProduct.isEmpty()) {
 			throw new RecordNotFoundException(ResponseConstants.INVALID_USER_REQUEST);
@@ -141,7 +141,7 @@ public class ProductService {
 			throws InvalidDetailsException, RecordNotFoundException {
 
 		checkUserAndItsRole(userId, "seller");
-
+		
 		Optional<Product> optProduct = productRepository.findByIdAndUserId(productId, userId);
 		if (optProduct.isEmpty()) {
 			throw new RecordNotFoundException(ResponseConstants.INVALID_USER_REQUEST);

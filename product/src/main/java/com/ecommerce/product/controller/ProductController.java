@@ -39,7 +39,7 @@ public class ProductController {
 	 */
 	@Autowired
 	private ProductService productService;
-
+	
 	/**
 	 * @param fileId
 	 * @return CreateProductOutDto
@@ -85,7 +85,7 @@ public class ProductController {
 		LOGGER.info("Get all products completed.");
 		return ResponseEntity.status(HttpStatus.OK).body(productOutDtoList);
 	}
-
+	
 	/**
 	 * @param productId
 	 * @return GetProductOutDto
@@ -98,7 +98,7 @@ public class ProductController {
 		LOGGER.info("Get product details completed for product id : {}", productId);
 		return ResponseEntity.status(HttpStatus.OK).body(getProductOutDto);
 	}
-
+	
 	/**
 	 * @param productId
 	 * @return ResponseOutDto
