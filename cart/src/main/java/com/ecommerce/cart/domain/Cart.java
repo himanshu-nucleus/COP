@@ -21,21 +21,22 @@ public class Cart {
 	private String id;
 	private Long userId;
 	private List<CartProducts> cartProducts;
+    @Override
+    public int hashCode() {
+        return Objects.hash(cartProducts, id, userId);
+    }
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (!(obj instanceof Cart)) {
+            return false;
+        }
+        Cart other = (Cart) obj;
+        return Objects.equals(cartProducts, other.cartProducts) && Objects.equals(id, other.id)
+                && Objects.equals(userId, other.userId);
+    }
 
-	@Override
-	public int hashCode() {
-		return Objects.hash(cartProducts, id, userId);
-	}
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj) {
-			return true;
-		}
-		if (!(obj instanceof Cart)) {
-			return false;
-		}
-		Cart other = (Cart) obj;
-		return Objects.equals(cartProducts, other.cartProducts) && Objects.equals(id, other.id)
-				&& Objects.equals(userId, other.userId);
-	}
+
 }
