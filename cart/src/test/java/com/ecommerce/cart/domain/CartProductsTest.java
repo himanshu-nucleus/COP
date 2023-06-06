@@ -69,7 +69,7 @@ public class CartProductsTest {
         assertNotEquals(cartProductsTest2, cartProductsTest);
         assertNotEquals(cartProductsTest2.hashCode(), cartProductsTest.hashCode());
         
-        cartProductsTest = buildCartProducts(productId, 2);
+        cartProductsTest = buildCartProducts(productId, 3);
         assertNotEquals(cartProductsTest2, cartProductsTest);
         assertNotEquals(cartProductsTest2.hashCode(), cartProductsTest.hashCode());
     }
