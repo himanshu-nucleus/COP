@@ -66,6 +66,8 @@ public class CartProductsTest {
         assertEquals(cartProductsTest2.hashCode(), cartProductsTest2.hashCode());
 
         cartProductsTest = buildCartProducts("chaged", quantity);
+        assertNotEquals(updateProductInDto2, updateProductInDto);
+        assertNotEquals(updateProductInDto2.hashCode(), updateProductInDto.hashCode());
         
         cartProductsTest = buildCartProducts(productId, 2);
     }
