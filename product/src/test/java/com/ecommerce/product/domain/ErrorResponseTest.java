@@ -60,7 +60,7 @@ public class ErrorResponseTest {
 		Integer errorCode = 400;
 		List<String> errorMessages = new ArrayList<String>();
 		errorMessages.add("str1");
-
+		
 		ErrorResponse errorResponseTest = buildErrorResponse(errorCode, errorMessages);
 		ErrorResponse errorResponseTest2 = buildErrorResponse(errorCode, errorMessages);
 		
@@ -78,6 +78,9 @@ public class ErrorResponseTest {
 		List<String> changed = new ArrayList<String>();
 		changed.add("str2");
 		errorResponseTest = buildErrorResponse(errorCode, changed);
+		assertNotEquals(errorResponseTest2, errorResponseTest);
+        assertNotEquals(errorResponseTest2.hashCode(), errorResponseTest.hashCode());
+        
 	}
 
 }

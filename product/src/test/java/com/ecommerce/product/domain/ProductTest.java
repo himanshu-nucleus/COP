@@ -103,7 +103,6 @@ public class ProductTest {
 		Long userId = 1L;
 
 		Product productTest = buildProduct(id, userId, name, description, quantity, price, discount, manufacturer);
-
 		Product productTest2 = buildProduct(id, userId, name, description, quantity, price, discount, manufacturer);
 
 		assertEquals(productTest, productTest);
@@ -116,21 +115,37 @@ public class ProductTest {
 		assertEquals(productTest2.hashCode(), productTest2.hashCode());
 
 		productTest = buildProduct("changed", userId, name, description, quantity, price, discount, manufacturer);
-
+		assertNotEquals(productTest2, productTest);
+		assertNotEquals(productTest2.hashCode(), productTest.hashCode());
+		
 		productTest = buildProduct(id, 2l, name, description, quantity, price, discount, manufacturer);
-
+		assertNotEquals(productTest2, productTest);
+		assertNotEquals(productTest2.hashCode(), productTest.hashCode());
+		
 		productTest = buildProduct(id, userId, "changed", description, quantity, price, discount, manufacturer);
-
+        assertNotEquals(productTest2, productTest);
+        assertNotEquals(productTest2.hashCode(), productTest.hashCode());
+        
 		productTest = buildProduct(id, userId, name, "changed", quantity, price, discount, manufacturer);
-
+        assertNotEquals(productTest2, productTest);
+        assertNotEquals(productTest2.hashCode(), productTest.hashCode());
+        
 		productTest = buildProduct(id, userId, name, description, 3, price, discount, manufacturer);
-
+        assertNotEquals(productTest2, productTest);
+        assertNotEquals(productTest2.hashCode(), productTest.hashCode());
+       
 		productTest = buildProduct(id, userId, name, description, quantity, 3.0, discount, manufacturer);
-
+        assertNotEquals(productTest2, productTest);
+        assertNotEquals(productTest2.hashCode(), productTest.hashCode());
+        
 		productTest = buildProduct(id, userId, name, description, quantity, price, 4.9, manufacturer);
-
+        assertNotEquals(productTest2, productTest);
+        assertNotEquals(productTest2.hashCode(), productTest.hashCode());
+        
 		productTest = buildProduct(id, userId, name, description, quantity, price, discount, "changed");
-
+        assertNotEquals(productTest2, productTest);
+        assertNotEquals(productTest2.hashCode(), productTest.hashCode());
+        
 	}
 
 }

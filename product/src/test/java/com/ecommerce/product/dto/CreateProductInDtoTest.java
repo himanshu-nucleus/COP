@@ -106,27 +106,33 @@ public class CreateProductInDtoTest {
 
 		createProductInDto = buildCreateProductInDto("changed", description, quantity, price, discount,
 				manufacturer);
-		assertNotEquals(createProductInDto, createProductInDto2);
+		assertNotEquals(createProductInDto2, createProductInDto);
+        assertNotEquals(createProductInDto2.hashCode(), createProductInDto.hashCode());
 
 		createProductInDto = buildCreateProductInDto(name, "changed", quantity, price, discount,
 				manufacturer);
 		assertNotEquals(createProductInDto, createProductInDto2);
+		assertNotEquals(createProductInDto2.hashCode(), createProductInDto.hashCode());
 		
 		createProductInDto = buildCreateProductInDto(name, description, 2, price, discount,
 				manufacturer);
 		assertNotEquals(createProductInDto, createProductInDto2);
+		assertNotEquals(createProductInDto2.hashCode(), createProductInDto.hashCode());
 	
 		createProductInDto = buildCreateProductInDto(name, description, quantity, 2.0, discount,
 				manufacturer);
 		assertNotEquals(createProductInDto, createProductInDto2);
+		assertNotEquals(createProductInDto2.hashCode(), createProductInDto.hashCode());
 		
 		createProductInDto = buildCreateProductInDto(name, description, quantity, price, 2.9,
 				manufacturer);
 		assertNotEquals(createProductInDto, createProductInDto2);
+		assertNotEquals(createProductInDto2.hashCode(), createProductInDto.hashCode());
 		
 		createProductInDto = buildCreateProductInDto(name, description, quantity, price, discount,
 				"changed");
 		assertNotEquals(createProductInDto, createProductInDto2);
+		assertNotEquals(createProductInDto2.hashCode(), createProductInDto.hashCode());
 
 	}
 
