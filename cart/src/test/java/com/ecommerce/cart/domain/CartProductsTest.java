@@ -66,10 +66,12 @@ public class CartProductsTest {
         assertEquals(cartProductsTest2.hashCode(), cartProductsTest2.hashCode());
 
         cartProductsTest = buildCartProducts("chaged", quantity);
-        assertNotEquals(updateProductInDto2, updateProductInDto);
-        assertNotEquals(updateProductInDto2.hashCode(), updateProductInDto.hashCode());
+        assertNotEquals(cartProductsTest2, cartProductsTest);
+        assertNotEquals(cartProductsTest2.hashCode(), cartProductsTest.hashCode());
         
         cartProductsTest = buildCartProducts(productId, 2);
+        assertNotEquals(cartProductsTest2, cartProductsTest);
+        assertNotEquals(cartProductsTest2.hashCode(), cartProductsTest.hashCode());
     }
 
 }

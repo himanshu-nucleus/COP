@@ -84,13 +84,19 @@ public class CartTest {
         assertEquals(cartTest2.hashCode(), cartTest2.hashCode());
 
         cartTest = buildCart("changed", userId, cartProducts);
+        assertNotEquals(cartTest2, cartTest);
+        assertNotEquals(cartTest2.hashCode(), cartTest.hashCode());
         
         cartTest = buildCart(id, 2L, cartProducts);
+        assertNotEquals(cartTest2, cartTest);
+        assertNotEquals(cartTest2.hashCode(), cartTest.hashCode());
         
         List<CartProducts> cartNew = new ArrayList<CartProducts>();
         CartProducts cartProduct2 = buildCartProducts("changed", 3);
         cartNew.add(cartProduct2);
         cartTest = buildCart(id, userId, cartNew);
+        assertNotEquals(cartTest2, cartTest);
+        assertNotEquals(cartTest2.hashCode(), cartTest.hashCode());
 
     }
     
