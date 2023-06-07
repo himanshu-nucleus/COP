@@ -17,7 +17,7 @@ public class Wallet {
 	
 	@Id
 	private String id;
-    private Integer userId;
+    private Long userId;
     private String cardNo;
     private double balance;
     private Boolean isDefault;

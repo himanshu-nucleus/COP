@@ -58,7 +58,7 @@ public class PaymentController {
 	 * @throws Exception
 	 */
 	@PutMapping(path = "update/default/wallet/{walletId}")
-	public ResponseEntity<ResponseOutDto> updateProducts(final @PathVariable String walletId,
+	public ResponseEntity<ResponseOutDto> updateDefaultWallet(final @PathVariable String walletId,
 			final @RequestParam Long userId) throws Exception {
 		LOGGER.info("Update default wallet started for id : {}", walletId);
 		ResponseOutDto responseOutDto = paymentService.updateDefaultWallet(userId, walletId);

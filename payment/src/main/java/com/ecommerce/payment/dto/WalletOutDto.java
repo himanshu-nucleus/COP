@@ -12,7 +12,7 @@ import lombok.ToString;
 public class WalletOutDto {
 
 	private String id;
-    private String userId;
+    private Long userId;
     private String cardNo;
     private double balance;
     private Boolean isDefault;
