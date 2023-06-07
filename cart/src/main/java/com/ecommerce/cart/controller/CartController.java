@@ -43,7 +43,7 @@ public class CartController {
 	 * @throws Exception
 	 */
 	@PostMapping(path = "create")
-	public ResponseEntity<ResponseOutDto> createProduct(final @RequestBody CreateCartInDto createCartInDto)
+	public ResponseEntity<ResponseOutDto> createCart(final @RequestBody CreateCartInDto createCartInDto)
 			throws Exception {
 		LOGGER.info("Create cart started.");
 		ResponseOutDto responseOutDto = cartService.createCart(createCartInDto);
@@ -71,7 +71,7 @@ public class CartController {
 	 * @throws Exception
 	 */
 	@PutMapping(path = "update/{cartId}")
-	public ResponseEntity<ResponseOutDto> updateProducts(final @RequestBody CreateCartInDto updateCartDetails,
+	public ResponseEntity<ResponseOutDto> updateCart(final @RequestBody CreateCartInDto updateCartDetails,
 			final @PathVariable String cartId) throws Exception {
 		LOGGER.info("Update cart started for cartId : {}", cartId);
 		ResponseOutDto responseOutDto = cartService.updateCart(updateCartDetails, cartId);
