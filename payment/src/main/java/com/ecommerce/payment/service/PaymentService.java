@@ -55,7 +55,7 @@ public class PaymentService {
 		if (optWallet.isPresent()) {
 			throw new RecordAlreadyExistsException(ResponseConstants.WALLET_AlREADY_EXISTS);
 		}
-
+		
 		if (addWalletInDto.getIsDefault() == true) {
 			List<Wallet> wallets = paymentRepository.findByUserIdAndIsDefault(addWalletInDto.getUserId(), true);
 			for (Wallet wallet : wallets) {
