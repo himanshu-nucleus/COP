@@ -41,17 +41,7 @@ public class UserService {
 	 * @throws RecordAlreadyExistsException
 	 */
 	public SignupOutDto signup(SignupInDto signupIndto) throws InvalidDetailsException, RecordAlreadyExistsException {
-		if (Objects.isNull(signupIndto) || Objects.isNull(signupIndto.getAddressLine1())
-				|| Objects.isNull(signupIndto.getAddressLine2()) || Objects.isNull(signupIndto.getCity())
-				|| Objects.isNull(signupIndto.getCountry()) || Objects.isNull(signupIndto.getCountryCode())
-				|| Objects.isNull(signupIndto.getEmail()) || Objects.isNull(signupIndto.getFirstName())
-				|| Objects.isNull(signupIndto.getGender()) || Objects.isNull(signupIndto.getLastName())
-				|| Objects.isNull(signupIndto.getPassword()) || Objects.isNull(signupIndto.getPhone())
-				|| Objects.isNull(signupIndto.getPostalCode()) || Objects.isNull(signupIndto.getRole())
-				|| Objects.isNull(signupIndto.getState())) {
-			throw new InvalidDetailsException(ResponseConstants.INVALID_INPUT_REQUEST);
-		}
-
+	
 		signupIndto.setEmail(signupIndto.getEmail().toLowerCase());
 		Optional<User> optionalUser = userRepository.findByEmail(signupIndto.getEmail());
 		if (optionalUser.isPresent()) {
@@ -113,16 +103,7 @@ public class UserService {
 	 */
 	public SignupOutDto updateUserDetails(Long userId, UpdateUserInDto updateUserInDto)
 			throws InvalidDetailsException, RecordAlreadyExistsException, RecordNotFoundException {
-		if (Objects.isNull(updateUserInDto) || Objects.isNull(updateUserInDto.getAddressLine1())
-				|| Objects.isNull(updateUserInDto.getAddressLine2()) || Objects.isNull(updateUserInDto.getCity())
-				|| Objects.isNull(updateUserInDto.getCountry()) || Objects.isNull(updateUserInDto.getCountryCode())
-				|| Objects.isNull(updateUserInDto.getEmail()) || Objects.isNull(updateUserInDto.getFirstName())
-				|| Objects.isNull(updateUserInDto.getGender()) || Objects.isNull(updateUserInDto.getLastName())
-				|| Objects.isNull(updateUserInDto.getPhone()) || Objects.isNull(updateUserInDto.getPostalCode())
-				|| Objects.isNull(updateUserInDto.getRole()) || Objects.isNull(updateUserInDto.getState())) {
-			throw new InvalidDetailsException(ResponseConstants.INVALID_INPUT_REQUEST);
-		}
-
+		
 		Optional<User> userById = userRepository.findById(userId);
 		if (userById.isEmpty()) {
 			throw new RecordNotFoundException("Record not found for user Id : " + userId);

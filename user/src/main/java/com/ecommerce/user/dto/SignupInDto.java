@@ -3,6 +3,8 @@ package com.ecommerce.user.dto;
 import java.util.Arrays;
 import java.util.Objects;
 
+import com.sun.istack.NotNull;
+
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -11,21 +13,49 @@ import lombok.ToString;
 @Setter
 @ToString
 public class SignupInDto {
-	
-	private String firstName;
-	private String gender;
-	private String lastName;
-	private String phone;
-	private String countryCode;
-	private String email;
-	private String addressLine1;
-	private String addressLine2;
-	private String city;
-	private String state;
-	private String country;
-	private String postalCode;
-	private String role;
-	private char[] password;
+
+    @NotNull
+    private String firstName;
+    
+    @NotNull
+    private String gender;
+    
+    @NotNull
+    private String lastName;
+    
+    @NotNull
+    private String phone;
+    
+    @NotNull
+    private String countryCode;
+    
+    @NotNull
+    private String email;
+    
+    @NotNull
+    private String addressLine1;
+    
+    @NotNull
+    private String addressLine2;
+    
+    @NotNull
+    private String city;
+    
+    @NotNull
+    private String state;
+    
+    @NotNull
+    private String country;
+    
+    @NotNull
+    private String postalCode;
+    
+    @NotNull
+    private String role;
+
+    @NotNull
+    private char[] password;
+
 
 	@Override
 	public int hashCode() {

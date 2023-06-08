@@ -24,6 +24,8 @@ import com.ecommerce.user.exception.RecordAlreadyExistsException;
 import com.ecommerce.user.exception.RecordNotFoundException;
 import com.ecommerce.user.service.UserService;
 
+import jakarta.validation.Valid;
+
 @RestController
 @RequestMapping(RestURLConstants.BASE_URL)
 public class UserController {
@@ -46,7 +48,7 @@ public class UserController {
 	 * @throws InvalidDetailsException
 	 */
 	@PostMapping(path = "/signup")
-	public final SignupOutDto signupUser(@RequestBody final SignupInDto signupIndto)
+	public final SignupOutDto signupUser(@RequestBody final @Valid SignupInDto signupIndto)
 			throws InvalidDetailsException, RecordAlreadyExistsException {
 		LOGGER.info("signup started for the user email : {}", signupIndto.getEmail());
 		SignupOutDto signupOutDTO = userService.signup(signupIndto);
@@ -76,7 +78,7 @@ public class UserController {
 	 */
 	@PutMapping(path = "/update/{userId}")
 	public final SignupOutDto getUserDetails(@PathVariable final Long userId,
-			@RequestBody final UpdateUserInDto updateUserInDto)
+			@RequestBody final @Valid UpdateUserInDto updateUserInDto)
 			throws InvalidDetailsException, RecordAlreadyExistsException, RecordNotFoundException {
 		LOGGER.info("Update user details started for user Id : {}", userId);
 		SignupOutDto signupOutDTO = userService.updateUserDetails(userId, updateUserInDto);

@@ -2,6 +2,8 @@ package com.ecommerce.user.dto;
 
 import java.util.Objects;
 
+import com.sun.istack.NotNull;
+
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -11,18 +13,43 @@ import lombok.ToString;
 @ToString
 public class UpdateUserInDto {
 	
+    @NotNull
 	private String firstName;
+    
+    @NotNull
 	private String gender;
+    
+    @NotNull
 	private String lastName;
+    
+    @NotNull
 	private String phone;
+	
+	@NotNull
 	private String countryCode;
+	
+	@NotNull
 	private String email;
+	
+	@NotNull
 	private String addressLine1;
+	
+	@NotNull
 	private String addressLine2;
+	
+	@NotNull
 	private String city;
+	
+	@NotNull
 	private String state;
+	
+	@NotNull
 	private String country;
+	
+	@NotNull
 	private String postalCode;
+	
+	@NotNull
 	private String role;
 
 	@Override
