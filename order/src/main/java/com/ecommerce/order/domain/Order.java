@@ -26,22 +26,28 @@ public class Order {
 	private String cardNo;
 	private List<Product> products;
 
-	@Override
-	public int hashCode() {
-		return Objects.hash(createDt, id, products, status, totalAmount, userId);
-	}
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj) {
-			return true;
-		}
-		if (!(obj instanceof Order)) {
-			return false;
-		}
-		Order other = (Order) obj;
-		return Objects.equals(createDt, other.createDt) && Objects.equals(id, other.id)
-				&& Objects.equals(products, other.products) && Objects.equals(status, other.status)
-				&& Double.doubleToLongBits(totalAmount) == Double.doubleToLongBits(other.totalAmount)
-				&& Objects.equals(userId, other.userId);
-	}
+    @Override
+    public int hashCode() {
+        return Objects.hash(cardNo, createDt, id, products, status, totalAmount, userId);
+    }
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        Order other = (Order) obj;
+        return Objects.equals(cardNo, other.cardNo) && Objects.equals(createDt, other.createDt)
+                && Objects.equals(id, other.id) && Objects.equals(products, other.products)
+                && Objects.equals(status, other.status)
+                && Double.doubleToLongBits(totalAmount) == Double.doubleToLongBits(other.totalAmount)
+                && Objects.equals(userId, other.userId);
+    }
+
+	
 }
