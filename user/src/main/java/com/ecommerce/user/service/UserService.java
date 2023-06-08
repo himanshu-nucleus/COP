@@ -1,6 +1,5 @@
 package com.ecommerce.user.service;
 
-import java.util.Objects;
 import java.util.Optional;
 
 import org.modelmapper.ModelMapper;
@@ -9,12 +8,12 @@ import org.springframework.stereotype.Service;
 
 import com.ecommerce.user.constants.ResponseConstants;
 import com.ecommerce.user.domain.User;
-import com.ecommerce.user.dto.LoginInDTO;
+import com.ecommerce.user.dto.LoginInDto;
 import com.ecommerce.user.dto.ResponseOutDto;
 import com.ecommerce.user.dto.SignupInDto;
 import com.ecommerce.user.dto.SignupOutDto;
 import com.ecommerce.user.dto.UpdateUserInDto;
-import com.ecommerce.user.dto.UserOutDTO;
+import com.ecommerce.user.dto.UserOutDto;
 import com.ecommerce.user.exception.InvalidDetailsException;
 import com.ecommerce.user.exception.RecordAlreadyExistsException;
 import com.ecommerce.user.exception.RecordNotFoundException;
@@ -40,18 +39,18 @@ public class UserService {
 	 * @throws InvalidDetailsException
 	 * @throws RecordAlreadyExistsException
 	 */
-	public SignupOutDto signup(SignupInDto signupIndto) throws InvalidDetailsException, RecordAlreadyExistsException {
+	public SignupOutDto signup(SignupInDto signupIndto) throws RecordAlreadyExistsException {
 	
 		signupIndto.setEmail(signupIndto.getEmail().toLowerCase());
 		Optional<User> optionalUser = userRepository.findByEmail(signupIndto.getEmail());
 		if (optionalUser.isPresent()) {
 			throw new RecordAlreadyExistsException("Record already exist for email : " + signupIndto.getEmail());
 		}
-
+	
 		User user = modelMapper.map(signupIndto, User.class);
-		user = userRepository.save(user);
+		User returnedUser = userRepository.save(user);
 
-		SignupOutDto signupOutDto = modelMapper.map(user, SignupOutDto.class);
+		SignupOutDto signupOutDto = modelMapper.map(returnedUser, SignupOutDto.class);
 		return signupOutDto;
 	}
 
@@ -64,7 +63,7 @@ public class UserService {
 
 		Optional<User> optionalUser = userRepository.findById(userId);
 		if (optionalUser.isEmpty()) {
-			throw new RecordNotFoundException("Recordnot found for user Id : " + userId);
+			throw new RecordNotFoundException("Record not found for user Id : " + userId);
 		}
 
 		SignupOutDto signupOutDto = modelMapper.map(optionalUser.get(), SignupOutDto.class);
@@ -77,7 +76,7 @@ public class UserService {
 	 * @throws RecordNotFoundException
 	 * @throws InvalidDetailsException
 	 */
-	public UserOutDTO login(LoginInDTO loginInDTO) throws RecordNotFoundException, InvalidDetailsException {
+	public UserOutDto login(LoginInDto loginInDTO) throws RecordNotFoundException, InvalidDetailsException {
 
 		Optional<User> optionalUser = userRepository.findByEmail(loginInDTO.getEmail());
 		if (optionalUser.isEmpty()) {
@@ -88,8 +87,8 @@ public class UserService {
 			throw new InvalidDetailsException(ResponseConstants.INVALID_EMAIL_OR_PASSWORD);
 		}
 
-		UserOutDTO userOutDTO = modelMapper.map(optionalUser.get(), UserOutDTO.class);
-		return userOutDTO;
+		UserOutDto userOutDto = modelMapper.map(optionalUser.get(), UserOutDto.class);
+		return userOutDto;
 
 	}
 

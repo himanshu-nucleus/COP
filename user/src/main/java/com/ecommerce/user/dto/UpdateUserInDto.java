@@ -2,8 +2,7 @@ package com.ecommerce.user.dto;
 
 import java.util.Objects;
 
-import com.sun.istack.NotNull;
-
+import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;

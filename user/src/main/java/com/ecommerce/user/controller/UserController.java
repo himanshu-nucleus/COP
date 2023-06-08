@@ -13,12 +13,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ecommerce.user.constants.RestURLConstants;
-import com.ecommerce.user.dto.LoginInDTO;
+import com.ecommerce.user.dto.LoginInDto;
 import com.ecommerce.user.dto.ResponseOutDto;
 import com.ecommerce.user.dto.SignupInDto;
 import com.ecommerce.user.dto.SignupOutDto;
 import com.ecommerce.user.dto.UpdateUserInDto;
-import com.ecommerce.user.dto.UserOutDTO;
+import com.ecommerce.user.dto.UserOutDto;
 import com.ecommerce.user.exception.InvalidDetailsException;
 import com.ecommerce.user.exception.RecordAlreadyExistsException;
 import com.ecommerce.user.exception.RecordNotFoundException;
@@ -77,7 +77,7 @@ public class UserController {
 	 * @throws RecordNotFoundException
 	 */
 	@PutMapping(path = "/update/{userId}")
-	public final SignupOutDto getUserDetails(@PathVariable final Long userId,
+	public final SignupOutDto updateUserDetails(@PathVariable final Long userId,
 			@RequestBody final @Valid UpdateUserInDto updateUserInDto)
 			throws InvalidDetailsException, RecordAlreadyExistsException, RecordNotFoundException {
 		LOGGER.info("Update user details started for user Id : {}", userId);
@@ -94,12 +94,12 @@ public class UserController {
 	 * @throws RecordNotFoundException
 	 */
 	@PostMapping(path = "/login")
-	public final UserOutDTO checkLogin(@RequestBody final LoginInDTO loginInDTO)
+	public final UserOutDto checkLogin(@RequestBody final LoginInDto loginInDTO)
 			throws RecordNotFoundException, InvalidDetailsException {
 		LOGGER.info("Login started for the user email : {}", loginInDTO.getEmail());
-		UserOutDTO userOutDTO = userService.login(loginInDTO);
+		UserOutDto userOutDto = userService.login(loginInDTO);
 		LOGGER.info("Successfully logged in for the user email : {}", loginInDTO.getEmail());
-		return userOutDTO;
+		return userOutDto;
 	}
 
 	/**

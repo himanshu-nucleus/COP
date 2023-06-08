@@ -11,7 +11,7 @@ import lombok.ToString;
 @ToString
 public class SignupOutDto {
 	
-	private String userId;
+	private Long userId;
 	private String firstName;
 	private String gender;
 	private String lastName;

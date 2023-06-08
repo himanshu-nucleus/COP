@@ -10,7 +10,7 @@ import lombok.ToString;
 @Getter
 @Setter
 @ToString
-public class LoginInDTO {
+public class LoginInDto {
 
     /**
      * The email id of user.
@@ -32,10 +32,10 @@ public class LoginInDTO {
         if (this == obj) {
             return true;
         }
-        if (!(obj instanceof LoginInDTO)) {
+        if (!(obj instanceof LoginInDto)) {
             return false;
         }
-        LoginInDTO other = (LoginInDTO) obj;
+        LoginInDto other = (LoginInDto) obj;
         return Objects.equals(email, other.email) && Arrays.equals(password, other.password);
     }
 
