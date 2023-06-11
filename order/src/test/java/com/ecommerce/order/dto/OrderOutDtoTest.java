@@ -108,7 +108,7 @@ public class OrderOutDtoTest {
         assertNotEquals(orderOutDtoTest2, orderOutDtoTest);
         assertNotEquals(orderOutDtoTest2.hashCode(), orderOutDtoTest.hashCode());
         
-        Instant ins = Instant.now();
+        Instant ins = Instant.MAX;
         orderOutDtoTest = buildOrderOutDto(id, ins, totalPrice, status, cardNo);
         assertNotEquals(orderOutDtoTest2, orderOutDtoTest);
         assertNotEquals(orderOutDtoTest2.hashCode(), orderOutDtoTest.hashCode());

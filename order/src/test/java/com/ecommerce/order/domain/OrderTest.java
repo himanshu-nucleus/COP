@@ -156,7 +156,7 @@ public class OrderTest {
         assertNotEquals(orderTest2, orderTest);
         assertNotEquals(orderTest2.hashCode(), orderTest.hashCode());
         
-        Instant newInstant = Instant.now();
+        Instant newInstant = Instant.MAX;
         orderTest = buildOrder(id, userId, newInstant, totalAmount, status, cardNo, products);
         assertNotEquals(orderTest2, orderTest);
         assertNotEquals(orderTest2.hashCode(), orderTest.hashCode());

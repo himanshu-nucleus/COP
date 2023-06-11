@@ -114,6 +114,7 @@ public class OrderService {
 		if (optWallet.isEmpty()) {
 			throw new RecordNotFoundException(ResponseConstants.DEFAULT_WALLET_NOT_FOUND);
 		}
+
 		Wallet wallet = optWallet.get();
 		if (wallet.getBalance() < totalPrice) {
 			throw new InvalidDetailsException(ResponseConstants.INSUFFICIENT_BALANCE);
@@ -186,8 +187,8 @@ public class OrderService {
 	 * @return ResponseOutDto
 	 * @throws RecordNotFoundException
 	 */
-	public ResponseOutDto deleteOrder(String orderId, Long userId) throws RecordNotFoundException {
-
+	public ResponseOutDto deleteOrder(Long userId, String orderId) throws RecordNotFoundException {
+	    
 		checkUserAndItsRole(userId, "buyer");
 
 		Optional<Order> optOrder = orderRepository.findByIdAndUserId(orderId, userId);

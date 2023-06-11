@@ -18,6 +18,13 @@ public class CartTest {
         cartTest.setUserId(userId);
         return cartTest;
     }
+    
+    public CartProducts buildCartProducts(String productId, Integer quantity) {
+        CartProducts cartProductsTest = new CartProducts();
+        cartProductsTest.setQuantity(quantity);
+        cartProductsTest.setProductId(productId);
+        return cartProductsTest;
+    }
 
     @Test
     public void getterSetterTest() {
@@ -100,11 +107,5 @@ public class CartTest {
 
     }
     
-    public CartProducts buildCartProducts(String productId, Integer quantity) {
-        CartProducts cartProductsTest = new CartProducts();
-        cartProductsTest.setQuantity(quantity);
-        cartProductsTest.setProductId(productId);
-        return cartProductsTest;
-    }
 
 }

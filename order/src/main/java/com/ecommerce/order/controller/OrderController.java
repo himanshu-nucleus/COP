@@ -89,7 +89,7 @@ public class OrderController {
 	public ResponseEntity<ResponseOutDto> deleteCart(final @RequestParam Long userId,
 			final @PathVariable String orderId) throws Exception {
 		LOGGER.info("Delete order for orderId : {}", orderId);
-		ResponseOutDto responseOutDTO = orderService.deleteOrder(orderId, userId);
+		ResponseOutDto responseOutDTO = orderService.deleteOrder(userId, orderId);
 		LOGGER.info("Delete order completed for orderId : {}", orderId);
 		return ResponseEntity.status(HttpStatus.OK).body(responseOutDTO);
 	}
