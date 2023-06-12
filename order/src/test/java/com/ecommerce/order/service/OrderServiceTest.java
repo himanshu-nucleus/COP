@@ -2,7 +2,6 @@ package com.ecommerce.order.service;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTimeoutPreemptively;
 
 import java.time.Instant;
 import java.util.ArrayList;
