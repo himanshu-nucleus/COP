@@ -30,14 +30,14 @@ jobs:
 
     - name: Build Cart Project with Gradle
       run: |
-        chmod +x cart
+        chmod +x cart/gradlew
         cd cart
         ./gradlew build
         cd ..
   
     - name: Build Product Project with Gradle
       run: |
-        chmod +x product
+        chmod +x product/gradlew
         cd product
         ./gradlew build
         cd ..
