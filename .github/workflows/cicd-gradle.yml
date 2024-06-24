@@ -31,13 +31,13 @@ jobs:
     - name: Build Cart Project with Gradle
       working-directory: cart
       run: |
-        chmod +x cart/gradlew
+        chmod +x cart
         ./gradlew build
   
     - name: Build Product Project with Gradle
       working-directory: product
       run: |
-        chmod +x product/gradlew
+        chmod +x product
         ./gradlew build
 
   dependency-submission:
