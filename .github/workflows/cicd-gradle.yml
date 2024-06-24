@@ -29,16 +29,18 @@ jobs:
       uses: gradle/gradle-build-action@v2
 
     - name: Build Cart Project with Gradle
-      working-directory: cart
       run: |
         chmod +x cart
+        cd cart
         ./gradlew build
+        cd ..
   
     - name: Build Product Project with Gradle
-      working-directory: product
       run: |
         chmod +x product
+        cd product
         ./gradlew build
+        cd ..
 
   dependency-submission:
 
